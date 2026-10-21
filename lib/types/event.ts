@@ -76,7 +76,8 @@ export type BudgetCategory =
   | 'Entertainment & Sound'
   | 'Photography & Media'
   | 'Logistics & Rentals'
-  | 'Contingency';
+  | 'Contingency'
+  | (string & {});
 
 export interface BudgetItem {
   id: string;

@@ -4,7 +4,7 @@ import { Sparkles, Heart } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="w-full border-t border-[#e5e5ea] bg-[#fbfbfd] py-12 px-4 sm:px-6 lg:px-8 text-xs text-[#86868b]">
+    <footer className="w-full border-t border-[#e5e5ea] bg-[#fbfbfd] py-12 px-4 sm:px-6 lg:px-8 text-xs text-[#555555]">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg bg-[#0071e3] flex items-center justify-center text-white">

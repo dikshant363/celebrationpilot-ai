@@ -21,17 +21,17 @@ export function SubNavFrosted() {
     <div className="w-full bg-[#fbfbfd]/90 border-b border-[#e5e5ea] px-4 py-2.5 backdrop-blur-xs text-xs">
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="w-2 h-2 rounded-full bg-[#34c759]" />
+          <span className="w-2 h-2 rounded-full bg-[#137333]" />
           <span className="font-semibold text-[#1d1d1f] truncate max-w-[200px] sm:max-w-[320px]">
             {brief.eventTitle}
           </span>
-          <span className="text-[#86868b]">•</span>
-          <span className="text-[#555555]">
+          <span className="text-[#555555]">•</span>
+          <span className="text-[#333333]">
             {brief.eventType} in {brief.city} ({brief.guestCount} guests)
           </span>
           {activeConcept && (
             <>
-              <span className="text-[#86868b]">•</span>
+              <span className="text-[#555555]">•</span>
               <span className="px-2 py-0.5 rounded-full bg-[#e8f2fe] text-[#0071e3] font-medium text-[11px]">
                 {activeConcept.title}
               </span>

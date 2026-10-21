@@ -177,7 +177,7 @@ export default function PlannerPage() {
         <h1 className="text-3xl font-bold text-[#1d1d1f] tracking-tight">
           Celebration Brief Wizard
         </h1>
-        <p className="text-sm text-[#86868b] mt-1.5">
+        <p className="text-sm text-[#555555] mt-1.5">
           Enter your celebration constraints to generate 3 tailored concepts and master run of show.
         </p>
       </div>
@@ -193,7 +193,7 @@ export default function PlannerPage() {
           <Card className="space-y-6">
             <div>
               <h2 className="text-lg font-bold text-[#1d1d1f]">Step 1: Event Fundamentals</h2>
-              <p className="text-xs text-[#86868b]">Select the celebration type and basic parameters</p>
+              <p className="text-xs text-[#555555]">Select the celebration type and basic parameters</p>
             </div>
 
             {/* Event Type */}
@@ -249,7 +249,7 @@ export default function PlannerPage() {
           <Card className="space-y-6">
             <div>
               <h2 className="text-lg font-bold text-[#1d1d1f]">Step 2: Venue & Hard Constraints</h2>
-              <p className="text-xs text-[#86868b]">
+              <p className="text-xs text-[#555555]">
                 Establish realistic boundaries for venue selection, headcount, and financial envelope
               </p>
             </div>
@@ -294,10 +294,11 @@ export default function PlannerPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase mb-1.5">
+                  <label htmlFor="currency-select" className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase mb-1.5">
                     Currency
                   </label>
                   <select
+                    id="currency-select"
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value as Currency)}
                     className="w-full px-3 py-2.5 text-sm bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
@@ -327,7 +328,7 @@ export default function PlannerPage() {
           <Card className="space-y-6">
             <div>
               <h2 className="text-lg font-bold text-[#1d1d1f]">Step 3: Aesthetic, Dietary & Priorities</h2>
-              <p className="text-xs text-[#86868b]">
+              <p className="text-xs text-[#555555]">
                 Fine-tune culinary curation, sensory ambience, and special guest accommodations
               </p>
             </div>
@@ -408,10 +409,11 @@ export default function PlannerPage() {
 
             {/* Special Requests */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
+              <label htmlFor="special-requests-input" className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
                 Special Requests & Notes (Optional)
               </label>
               <textarea
+                id="special-requests-input"
                 rows={3}
                 placeholder="Any special family traditions, surprise performances, or strict curfew requirements..."
                 value={specialRequests}

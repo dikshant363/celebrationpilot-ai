@@ -49,7 +49,7 @@ export default function ExportPage() {
         <div>
           <Link
             href="/workspace"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0071e3] hover:underline mb-2"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0071e3] hover:underline mb-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] rounded"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Workspace
@@ -57,7 +57,7 @@ export default function ExportPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f]">
             Printable Celebration Dossier
           </h1>
-          <p className="text-xs text-[#86868b] mt-1">
+          <p className="text-xs text-[#555555] mt-1">
             Official event execution blueprint ready for print distribution and PDF archiving
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function ExportPage() {
             CelebrationPilot AI — Master Event Dossier
           </div>
           <h2 className="text-3xl font-bold text-[#1d1d1f]">{brief.eventTitle}</h2>
-          <p className="text-sm text-[#86868b] mt-1">
+          <p className="text-sm text-[#555555] mt-1">
             {currentPlan.title} • {currentPlan.tagline}
           </p>
         </div>
@@ -90,7 +90,7 @@ export default function ExportPage() {
         {/* Key Parameters Matrix */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-[#fbfbfd] p-4 rounded-xl border border-[#e5e5ea]">
-            <div className="text-[11px] uppercase font-semibold text-[#86868b]">Date & City</div>
+            <div className="text-[11px] uppercase font-semibold text-[#555555]">Date & City</div>
             <div className="text-sm font-bold text-[#1d1d1f] mt-1">
               {brief.targetDate} • {brief.city}
             </div>
@@ -98,7 +98,7 @@ export default function ExportPage() {
           </div>
 
           <div className="bg-[#fbfbfd] p-4 rounded-xl border border-[#e5e5ea]">
-            <div className="text-[11px] uppercase font-semibold text-[#86868b]">Venue & Scale</div>
+            <div className="text-[11px] uppercase font-semibold text-[#555555]">Venue & Scale</div>
             <div className="text-sm font-bold text-[#1d1d1f] mt-1">
               {brief.venueType}
             </div>
@@ -106,11 +106,11 @@ export default function ExportPage() {
           </div>
 
           <div className="bg-[#fbfbfd] p-4 rounded-xl border border-[#e5e5ea]">
-            <div className="text-[11px] uppercase font-semibold text-[#86868b]">Financial Envelope</div>
+            <div className="text-[11px] uppercase font-semibold text-[#555555]">Financial Envelope</div>
             <div className="text-sm font-bold text-[#0071e3] mt-1">
               {brief.currency} {budgetMetrics.totalSpent.toLocaleString()} / {brief.currency} {brief.budgetTotal.toLocaleString()}
             </div>
-            <div className="text-xs text-[#34c759] mt-0.5">{budgetMetrics.verdict} Envelope</div>
+            <div className="text-xs text-[#137333] font-semibold mt-0.5">{budgetMetrics.verdict} Envelope</div>
           </div>
         </div>
 
@@ -134,7 +134,7 @@ export default function ExportPage() {
                   <td className="py-2.5 px-3 font-mono font-bold text-[#0071e3]">{item.time}</td>
                   <td className="py-2.5 px-3 font-semibold text-[#1d1d1f]">{item.title}</td>
                   <td className="py-2.5 px-3 text-[#555555]">{item.description}</td>
-                  <td className="py-2.5 px-3 text-[#666666]">{item.lead}</td>
+                  <td className="py-2.5 px-3 text-[#333333]">{item.lead}</td>
                 </tr>
               ))}
             </tbody>
@@ -166,10 +166,10 @@ export default function ExportPage() {
                     {item.isVerifiedQuote ? (
                       <span className="text-[#0071e3] font-semibold">✓ Verified Quote</span>
                     ) : (
-                      <span className="text-[#86868b]">Estimated</span>
+                      <span className="text-[#555555]">Estimated</span>
                     )}
                   </td>
-                  <td className="py-2.5 px-3 text-[#666666]">{item.notes}</td>
+                  <td className="py-2.5 px-3 text-[#555555]">{item.notes}</td>
                 </tr>
               ))}
             </tbody>
@@ -200,10 +200,10 @@ export default function ExportPage() {
                     <span
                       className={
                         task.status === 'Completed'
-                          ? 'text-[#28a745]'
+                          ? 'text-[#137333] font-semibold'
                           : task.status === 'In Progress'
-                          ? 'text-[#b06000]'
-                          : 'text-[#86868b]'
+                          ? 'text-[#b06000] font-semibold'
+                          : 'text-[#555555]'
                       }
                     >
                       {task.status}
@@ -216,7 +216,7 @@ export default function ExportPage() {
         </div>
 
         {/* Footer Signature Block */}
-        <div className="pt-8 border-t border-[#e5e5ea] text-xs text-[#86868b] flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="pt-8 border-t border-[#e5e5ea] text-xs text-[#555555] flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>CelebrationPilot AI • Architectural Event Intelligence Platform</span>
           <span>Dossier Generated: {new Date().toLocaleDateString()}</span>
         </div>

@@ -69,7 +69,7 @@ export default function HomePage() {
           <span className="text-[#0071e3]">autonomous AI</span> precision.
         </h1>
 
-        <p className="text-lg sm:text-xl text-[#86868b] max-w-2xl mx-auto mb-10 font-normal leading-relaxed">
+        <p className="text-lg sm:text-xl text-[#555555] max-w-2xl mx-auto mb-10 font-normal leading-relaxed">
           From milestone birthdays to 500-guest weddings. Receive three tailored event
           concepts, minute-by-minute run of show, deterministic budget math, and printable
           master dossiers in seconds.
@@ -102,7 +102,7 @@ export default function HomePage() {
             <h4 className="text-xs font-bold text-[#1d1d1f] uppercase tracking-wider">
               3 Archetype Plans
             </h4>
-            <p className="text-xs text-[#86868b]">
+            <p className="text-xs text-[#555555]">
               Compare Opulent Luxe, Boho Botanical, and High-Tech Neon concepts.
             </p>
           </div>
@@ -114,7 +114,7 @@ export default function HomePage() {
             <h4 className="text-xs font-bold text-[#1d1d1f] uppercase tracking-wider">
               Zero-Deficit Budget
             </h4>
-            <p className="text-xs text-[#86868b]">
+            <p className="text-xs text-[#555555]">
               Deterministic category allocation with real-time overrun alerts.
             </p>
           </div>
@@ -126,7 +126,7 @@ export default function HomePage() {
             <h4 className="text-xs font-bold text-[#1d1d1f] uppercase tracking-wider">
               Master Run of Show
             </h4>
-            <p className="text-xs text-[#86868b]">
+            <p className="text-xs text-[#555555]">
               Time-stamped schedules with designated lead coordinators.
             </p>
           </div>
@@ -138,7 +138,7 @@ export default function HomePage() {
             <h4 className="text-xs font-bold text-[#1d1d1f] uppercase tracking-wider">
               Printable Dossier
             </h4>
-            <p className="text-xs text-[#86868b]">
+            <p className="text-xs text-[#555555]">
               Export full PDF event blueprints for venues and catering staff.
             </p>
           </div>
@@ -152,7 +152,7 @@ export default function HomePage() {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f] mb-3">
               Engineered for every life milestone
             </h2>
-            <p className="text-sm text-[#86868b]">
+            <p className="text-sm text-[#555555]">
               CelebrationPilot AI adapts its catering models, soundscapes, and logistics
               checklists to your exact event scale.
             </p>
@@ -213,7 +213,7 @@ export default function HomePage() {
           <h3 className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">
             Client-Side Privacy & BYO Gemini API Key
           </h3>
-          <p className="text-xs sm:text-sm text-[#555555] max-w-xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#333333] max-w-xl mx-auto leading-relaxed">
             Your event details and guests are never shared with third parties or stored on external servers.
             You can bring your own Google AI Studio API key directly from the top navigation bar.
           </p>

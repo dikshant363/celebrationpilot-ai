@@ -1,5 +1,15 @@
 import { EventBrief, DetailedEventPlan, BudgetMetrics } from '../types/event';
 
+export function escapeHtml(str: unknown): string {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 export function formatEventPlanAsHtml(
   brief: EventBrief,
   plan: DetailedEventPlan,
@@ -9,31 +19,30 @@ export function formatEventPlanAsHtml(
   const pendingCount = plan.guestList.filter((g) => g.rsvpStatus === 'Pending').length;
   const declinedCount = plan.guestList.filter((g) => g.rsvpStatus === 'Declined').length;
 
-  return `
-<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Celebration Dossier — ${brief.eventTitle}</title>
+  <title>Celebration Dossier — ${escapeHtml(brief.eventTitle)}</title>
   <style>
     @page { margin: 20mm; size: A4; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1d1d1f; line-height: 1.5; margin: 0; padding: 24px; }
     .header { border-bottom: 2px solid #0071e3; padding-bottom: 16px; margin-bottom: 24px; }
     .badge { display: inline-block; background: #e8f2fe; color: #0071e3; font-weight: 600; font-size: 11px; padding: 4px 10px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.5px; }
     h1 { font-size: 26px; font-weight: 700; margin: 8px 0 4px; color: #1d1d1f; }
-    .tagline { color: #86868b; font-size: 14px; margin: 0; }
+    .tagline { color: #555555; font-size: 14px; margin: 0; }
     .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
     .meta-card { background: #fbfbfd; border: 1px solid #d2d2d7; border-radius: 8px; padding: 12px; }
-    .meta-label { font-size: 11px; text-transform: uppercase; color: #86868b; font-weight: 600; }
+    .meta-label { font-size: 11px; text-transform: uppercase; color: #555555; font-weight: 600; }
     .meta-value { font-size: 15px; font-weight: 600; color: #1d1d1f; margin-top: 4px; }
     h2 { font-size: 18px; border-bottom: 1px solid #d2d2d7; padding-bottom: 6px; margin-top: 28px; color: #1d1d1f; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
     th { text-align: left; background: #f5f5f7; padding: 8px 10px; border-bottom: 1px solid #d2d2d7; font-weight: 600; color: #1d1d1f; }
     td { padding: 8px 10px; border-bottom: 1px solid #e5e5ea; }
-    .status-confirmed { color: #34c759; font-weight: 600; }
-    .status-pending { color: #ff9500; font-weight: 600; }
-    .status-declined { color: #ff3b30; font-weight: 600; }
-    .footer { margin-top: 40px; border-top: 1px solid #d2d2d7; padding-top: 12px; font-size: 11px; color: #86868b; display: flex; justify-content: space-between; }
+    .status-confirmed { color: #137333; font-weight: 600; }
+    .status-pending { color: #b06000; font-weight: 600; }
+    .status-declined { color: #d93025; font-weight: 600; }
+    .footer { margin-top: 40px; border-top: 1px solid #d2d2d7; padding-top: 12px; font-size: 11px; color: #555555; display: flex; justify-content: space-between; }
     @media print {
       body { padding: 0; }
       .no-print { display: none; }
@@ -43,22 +52,22 @@ export function formatEventPlanAsHtml(
 <body>
   <div class="header">
     <span class="badge">CelebrationPilot AI — Master Event Dossier</span>
-    <h1>${brief.eventTitle}</h1>
-    <p class="tagline">${plan.title} • ${plan.tagline}</p>
+    <h1>${escapeHtml(brief.eventTitle)}</h1>
+    <p class="tagline">${escapeHtml(plan.title)} • ${escapeHtml(plan.tagline)}</p>
   </div>
 
   <div class="grid">
     <div class="meta-card">
       <div class="meta-label">Date & Destination</div>
-      <div class="meta-value">${brief.targetDate} • ${brief.city}</div>
+      <div class="meta-value">${escapeHtml(brief.targetDate)} • ${escapeHtml(brief.city)}</div>
     </div>
     <div class="meta-card">
       <div class="meta-label">Venue & Guest Count</div>
-      <div class="meta-value">${brief.venueType} (${brief.guestCount} Guests)</div>
+      <div class="meta-value">${escapeHtml(brief.venueType)} (${brief.guestCount} Guests)</div>
     </div>
     <div class="meta-card">
       <div class="meta-label">Budget Health</div>
-      <div class="meta-value">${brief.currency} ${metrics.totalSpent.toLocaleString()} / ${brief.currency} ${metrics.totalBudget.toLocaleString()} (${metrics.verdict})</div>
+      <div class="meta-value">${escapeHtml(brief.currency)} ${metrics.totalSpent.toLocaleString()} / ${escapeHtml(brief.currency)} ${metrics.totalBudget.toLocaleString()} (${escapeHtml(metrics.verdict)})</div>
     </div>
   </div>
 
@@ -77,10 +86,10 @@ export function formatEventPlanAsHtml(
         .map(
           (s) => `
         <tr>
-          <td><strong>${s.time}</strong></td>
-          <td>${s.title}</td>
-          <td>${s.description}</td>
-          <td>${s.lead}</td>
+          <td><strong>${escapeHtml(s.time)}</strong></td>
+          <td>${escapeHtml(s.title)}</td>
+          <td>${escapeHtml(s.description)}</td>
+          <td>${escapeHtml(s.lead)}</td>
         </tr>
       `
         )
@@ -93,8 +102,8 @@ export function formatEventPlanAsHtml(
     <thead>
       <tr>
         <th>Category</th>
-        <th>Allocated (${brief.currency})</th>
-        <th>Spent / Committed (${brief.currency})</th>
+        <th>Allocated (${escapeHtml(brief.currency)})</th>
+        <th>Spent / Committed (${escapeHtml(brief.currency)})</th>
         <th>Verification</th>
         <th>Operational Notes</th>
       </tr>
@@ -104,11 +113,11 @@ export function formatEventPlanAsHtml(
         .map(
           (b) => `
         <tr>
-          <td><strong>${b.category}</strong></td>
+          <td><strong>${escapeHtml(b.category)}</strong></td>
           <td>${b.allocated.toLocaleString()}</td>
           <td>${b.spent.toLocaleString()}</td>
-          <td>${b.isVerifiedQuote ? '<span style="color:#0071e3;font-weight:600;">✓ Verified Quote</span>' : '<span style="color:#86868b;">Estimated</span>'}</td>
-          <td>${b.notes}</td>
+          <td>${b.isVerifiedQuote ? '<span style="color:#0071e3;font-weight:600;">✓ Verified Quote</span>' : '<span style="color:#555555;">Estimated</span>'}</td>
+          <td>${escapeHtml(b.notes)}</td>
         </tr>
       `
         )
@@ -131,9 +140,9 @@ export function formatEventPlanAsHtml(
         .map(
           (t) => `
         <tr>
-          <td>${t.duePhase}</td>
-          <td><strong>${t.title}</strong></td>
-          <td>${t.priority}</td>
+          <td>${escapeHtml(t.duePhase)}</td>
+          <td><strong>${escapeHtml(t.title)}</strong></td>
+          <td>${escapeHtml(t.priority)}</td>
           <td>${t.status === 'Completed' ? '<span class="status-confirmed">Completed</span>' : t.status === 'In Progress' ? '<span class="status-pending">In Progress</span>' : 'To Do'}</td>
         </tr>
       `
@@ -163,10 +172,10 @@ export function formatEventPlanAsHtml(
         .map(
           (g) => `
         <tr>
-          <td><strong>${g.name}</strong></td>
-          <td>${g.category}</td>
-          <td class="status-${g.rsvpStatus.toLowerCase()}">${g.rsvpStatus}</td>
-          <td>${g.dietary}</td>
+          <td><strong>${escapeHtml(g.name)}</strong></td>
+          <td>${escapeHtml(g.category)}</td>
+          <td class="status-${escapeHtml(g.rsvpStatus.toLowerCase())}">${escapeHtml(g.rsvpStatus)}</td>
+          <td>${escapeHtml(g.dietary)}</td>
           <td>${g.plusOne ? 'Yes (+1)' : 'Solo'}</td>
         </tr>
       `
@@ -192,12 +201,12 @@ export function formatEventPlanAsHtml(
         .map(
           (v) => `
         <tr>
-          <td><strong>${v.name}</strong></td>
-          <td>${v.service}</td>
-          <td>${brief.currency} ${v.estimatedCost.toLocaleString()}</td>
-          <td>${v.actualCost !== null ? `${brief.currency} ${v.actualCost.toLocaleString()}` : 'Pending Quote'}</td>
-          <td>${v.status}</td>
-          <td>${v.contact}</td>
+          <td><strong>${escapeHtml(v.name)}</strong></td>
+          <td>${escapeHtml(v.service)}</td>
+          <td>${escapeHtml(brief.currency)} ${v.estimatedCost.toLocaleString()}</td>
+          <td>${v.actualCost !== null ? `${escapeHtml(brief.currency)} ${v.actualCost.toLocaleString()}` : 'Pending Quote'}</td>
+          <td>${escapeHtml(v.status)}</td>
+          <td>${escapeHtml(v.contact)}</td>
         </tr>
       `
         )
@@ -210,8 +219,7 @@ export function formatEventPlanAsHtml(
     <span>Export Timestamp: ${new Date().toISOString()}</span>
   </div>
 </body>
-</html>
-  `;
+</html>`;
 }
 
 export function exportEventPlanToPrint(

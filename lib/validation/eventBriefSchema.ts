@@ -27,11 +27,30 @@ export interface ValidationResult {
   sanitized?: EventBrief;
 }
 
-function sanitizeText(input: unknown): string {
+export function sanitizeText(input: unknown): string {
   if (typeof input !== 'string') return '';
   return input
-    .replace(/[<>]/g, '') // strip HTML brackets
+    // Strip HTML brackets and control characters
+    .replace(/[\x00-\x1F\x7F<>]/g, '')
     .trim();
+}
+
+export function validateCustomApiKey(key?: unknown): { isValid: boolean; sanitized?: string; error?: string } {
+  if (!key || typeof key !== 'string') {
+    return { isValid: true, sanitized: undefined };
+  }
+  const trimmed = key.trim();
+  if (trimmed === '') {
+    return { isValid: true, sanitized: undefined };
+  }
+  // Google AI Studio API keys are typically 39-60 alphanumeric characters with dashes/underscores
+  if (!/^[A-Za-z0-9_-]{20,128}$/.test(trimmed)) {
+    return {
+      isValid: false,
+      error: 'Invalid API key format. Expected 20-128 alphanumeric characters with dashes or underscores.',
+    };
+  }
+  return { isValid: true, sanitized: trimmed };
 }
 
 export function validateEventBrief(raw: unknown): ValidationResult {
@@ -108,22 +127,33 @@ export function validateEventBrief(raw: unknown): ValidationResult {
   const themePreference = sanitizeText(data.themePreference);
   if (!themePreference) {
     errors.themePreference = 'Please specify a preferred theme or stylistic aesthetic';
+  } else if (themePreference.length > 120) {
+    errors.themePreference = 'Theme preference cannot exceed 120 characters';
   }
 
   // arrays
   const dietaryRestrictions = Array.isArray(data.dietaryRestrictions)
-    ? data.dietaryRestrictions.map(sanitizeText).filter(Boolean)
+    ? data.dietaryRestrictions
+        .map(sanitizeText)
+        .filter((t) => t.length > 0 && t.length <= 50)
+        .slice(0, 20)
     : [];
 
   const accessibilityRequirements = Array.isArray(data.accessibilityRequirements)
-    ? data.accessibilityRequirements.map(sanitizeText).filter(Boolean)
+    ? data.accessibilityRequirements
+        .map(sanitizeText)
+        .filter((t) => t.length > 0 && t.length <= 60)
+        .slice(0, 20)
     : [];
 
   const vibeAndPriorities = Array.isArray(data.vibeAndPriorities)
-    ? data.vibeAndPriorities.map(sanitizeText).filter(Boolean)
+    ? data.vibeAndPriorities
+        .map(sanitizeText)
+        .filter((t) => t.length > 0 && t.length <= 60)
+        .slice(0, 20)
     : [];
 
-  const specialRequests = sanitizeText(data.specialRequests);
+  const specialRequests = sanitizeText(data.specialRequests).slice(0, 1000);
 
   const isValid = Object.keys(errors).length === 0;
 

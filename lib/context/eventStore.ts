@@ -4,6 +4,8 @@ import {
   TaskItem,
   GuestItem,
   BudgetItem,
+  ScheduleItem,
+  VendorItem,
   RSVPStatus,
 } from '../types/event';
 
@@ -273,6 +275,112 @@ export const eventStore = {
             [prev.selectedConceptId]: {
               ...currentPlan,
               budgetBreakdown: updatedBreakdown,
+            },
+          },
+        },
+      };
+    });
+  },
+
+  addBudgetItem(item: Omit<BudgetItem, 'id'>) {
+    eventStore.setState((prev) => {
+      if (!prev.planSuite) return prev;
+      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
+      if (!currentPlan) return prev;
+
+      const newItem: BudgetItem = {
+        ...item,
+        id: `custom-b-${Date.now()}`,
+      };
+
+      return {
+        ...prev,
+        planSuite: {
+          ...prev.planSuite,
+          detailedPlans: {
+            ...prev.planSuite.detailedPlans,
+            [prev.selectedConceptId]: {
+              ...currentPlan,
+              budgetBreakdown: [...currentPlan.budgetBreakdown, newItem],
+            },
+          },
+        },
+      };
+    });
+  },
+
+  addScheduleItem(item: ScheduleItem) {
+    eventStore.setState((prev) => {
+      if (!prev.planSuite) return prev;
+      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
+      if (!currentPlan) return prev;
+
+      const updatedSchedule = [...currentPlan.schedule, item].sort((a, b) =>
+        a.time.localeCompare(b.time)
+      );
+
+      return {
+        ...prev,
+        planSuite: {
+          ...prev.planSuite,
+          detailedPlans: {
+            ...prev.planSuite.detailedPlans,
+            [prev.selectedConceptId]: {
+              ...currentPlan,
+              schedule: updatedSchedule,
+            },
+          },
+        },
+      };
+    });
+  },
+
+  updateVendor(vendorId: string, updates: Partial<VendorItem>) {
+    eventStore.setState((prev) => {
+      if (!prev.planSuite) return prev;
+      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
+      if (!currentPlan) return prev;
+
+      const updatedVendors = currentPlan.vendorDirectory.map((vendor) =>
+        vendor.id === vendorId ? { ...vendor, ...updates } : vendor
+      );
+
+      return {
+        ...prev,
+        planSuite: {
+          ...prev.planSuite,
+          detailedPlans: {
+            ...prev.planSuite.detailedPlans,
+            [prev.selectedConceptId]: {
+              ...currentPlan,
+              vendorDirectory: updatedVendors,
+            },
+          },
+        },
+      };
+    });
+  },
+
+  addVendor(vendor: Omit<VendorItem, 'id'>) {
+    eventStore.setState((prev) => {
+      if (!prev.planSuite) return prev;
+      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
+      if (!currentPlan) return prev;
+
+      const newVendor: VendorItem = {
+        ...vendor,
+        id: `custom-v-${Date.now()}`,
+      };
+
+      return {
+        ...prev,
+        planSuite: {
+          ...prev.planSuite,
+          detailedPlans: {
+            ...prev.planSuite.detailedPlans,
+            [prev.selectedConceptId]: {
+              ...currentPlan,
+              vendorDirectory: [...currentPlan.vendorDirectory, newVendor],
             },
           },
         },

@@ -1,11 +1,21 @@
 import { GoogleGenAI } from '@google/genai';
-import { EventBrief, GeneratedPlanSuite } from '../types/event';
+import {
+  EventBrief,
+  GeneratedPlanSuite,
+  EventConcept,
+  DetailedEventPlan,
+} from '../types/event';
 import { generateMockPlanSuite } from './mockEventEngine';
 
-const PRIMARY_MODEL = 'gemini-3.8-flash';
-const SECONDARY_MODEL = 'gemini-3.5-flash';
-const TERTIARY_MODEL = 'gemini-3.5-flash-lite';
-const REQUEST_TIMEOUT_MS = 20000;
+// Candidate models in preference order: official Google Gemini models with fallback
+const CANDIDATE_MODELS = [
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+  'gemini-2.5-pro',
+  'gemini-3.8-flash',
+];
+const REQUEST_TIMEOUT_MS = 25000;
 
 function buildEventPrompt(brief: EventBrief): string {
   return `
@@ -124,6 +134,150 @@ async function executeModelInference(
   }
 }
 
+export function validateAndRepairPlanSuite(
+  parsed: Record<string, unknown>,
+  brief: EventBrief
+): GeneratedPlanSuite | null {
+  if (!parsed || typeof parsed !== 'object') return null;
+
+  const rawConcepts = parsed.concepts;
+  if (!Array.isArray(rawConcepts) || rawConcepts.length < 3) return null;
+
+  const fallbackSuite = generateMockPlanSuite(brief);
+
+  const repairedConcepts: EventConcept[] = [];
+  const repairedPlans: Record<string, DetailedEventPlan> = {};
+
+  for (let i = 0; i < 3; i++) {
+    const c = (rawConcepts[i] as Partial<EventConcept>) || {};
+    const fallbackConcept = fallbackSuite.concepts[i];
+    const conceptId = c.id || `concept-${i + 1}`;
+
+    const repairedConcept: EventConcept = {
+      id: conceptId,
+      title: typeof c.title === 'string' && c.title.trim() ? c.title.trim() : fallbackConcept.title,
+      tagline: typeof c.tagline === 'string' && c.tagline.trim() ? c.tagline.trim() : fallbackConcept.tagline,
+      vibe: typeof c.vibe === 'string' && c.vibe.trim() ? c.vibe.trim() : fallbackConcept.vibe,
+      feasibilityScore:
+        typeof c.feasibilityScore === 'number' && c.feasibilityScore >= 50 && c.feasibilityScore <= 100
+          ? Math.round(c.feasibilityScore)
+          : fallbackConcept.feasibilityScore,
+      budgetEstimate:
+        typeof c.budgetEstimate === 'number' && c.budgetEstimate > 0
+          ? Math.round(c.budgetEstimate)
+          : fallbackConcept.budgetEstimate,
+      categoryShares:
+        c.categoryShares && typeof c.categoryShares === 'object'
+          ? {
+              venue: Number(c.categoryShares.venue) || fallbackConcept.categoryShares.venue,
+              catering: Number(c.categoryShares.catering) || fallbackConcept.categoryShares.catering,
+              decor: Number(c.categoryShares.decor) || fallbackConcept.categoryShares.decor,
+              entertainment: Number(c.categoryShares.entertainment) || fallbackConcept.categoryShares.entertainment,
+              photography: Number(c.categoryShares.photography) || fallbackConcept.categoryShares.photography,
+              logistics: Number(c.categoryShares.logistics) || fallbackConcept.categoryShares.logistics,
+              contingency: Number(c.categoryShares.contingency) || fallbackConcept.categoryShares.contingency,
+            }
+          : fallbackConcept.categoryShares,
+      decorConcept: typeof c.decorConcept === 'string' && c.decorConcept.trim() ? c.decorConcept.trim() : fallbackConcept.decorConcept,
+      cateringSummary: {
+        style: c.cateringSummary?.style || fallbackConcept.cateringSummary.style,
+        perGuestEstimate:
+          Number(c.cateringSummary?.perGuestEstimate) || fallbackConcept.cateringSummary.perGuestEstimate,
+        highlights:
+          Array.isArray(c.cateringSummary?.highlights) && c.cateringSummary.highlights.length > 0
+            ? c.cateringSummary.highlights.map(String)
+            : fallbackConcept.cateringSummary.highlights,
+      },
+      entertainmentHighlights:
+        Array.isArray(c.entertainmentHighlights) && c.entertainmentHighlights.length > 0
+          ? c.entertainmentHighlights.map(String)
+          : fallbackConcept.entertainmentHighlights,
+      whyThisWorks: typeof c.whyThisWorks === 'string' ? c.whyThisWorks : fallbackConcept.whyThisWorks,
+      tradeOffs: typeof c.tradeOffs === 'string' ? c.tradeOffs : fallbackConcept.tradeOffs,
+    };
+    repairedConcepts.push(repairedConcept);
+
+    // Detailed plan validation
+    const rawPlans = (parsed.detailedPlans as Record<string, Partial<DetailedEventPlan>>) || {};
+    const planCandidate = rawPlans[conceptId] || rawPlans[c.id || ''] || fallbackSuite.detailedPlans[fallbackConcept.id];
+
+    repairedPlans[conceptId] = {
+      conceptId,
+      title: repairedConcept.title,
+      tagline: repairedConcept.tagline,
+      schedule:
+        Array.isArray(planCandidate?.schedule) && planCandidate.schedule.length > 0
+          ? planCandidate.schedule.map((s, idx) => ({
+              time: s.time || `${18 + idx}:00`,
+              title: s.title || `Milestone ${idx + 1}`,
+              description: s.description || 'Operational execution',
+              lead: s.lead || 'Event Coordinator',
+            }))
+          : fallbackSuite.detailedPlans[fallbackConcept.id].schedule,
+      budgetBreakdown:
+        Array.isArray(planCandidate?.budgetBreakdown) && planCandidate.budgetBreakdown.length > 0
+          ? planCandidate.budgetBreakdown.map((b, idx) => ({
+              id: b.id || `${conceptId}-b${idx + 1}`,
+              category: b.category || 'Venue',
+              allocated: Number(b.allocated) || 1000,
+              spent: Number(b.spent) || 0,
+              notes: b.notes || 'Allocated quota',
+              isVerifiedQuote: Boolean(b.isVerifiedQuote),
+            }))
+          : fallbackSuite.detailedPlans[fallbackConcept.id].budgetBreakdown,
+      tasks:
+        Array.isArray(planCandidate?.tasks) && planCandidate.tasks.length > 0
+          ? planCandidate.tasks.map((t, idx) => ({
+              id: t.id || `${conceptId}-t${idx + 1}`,
+              title: t.title || `Task ${idx + 1}`,
+              category: t.category || 'General',
+              duePhase: t.duePhase || '1 Week Prior',
+              status: t.status || 'To Do',
+              priority: t.priority || 'Medium',
+              assignedTo: t.assignedTo || 'Coordinator',
+            }))
+          : fallbackSuite.detailedPlans[fallbackConcept.id].tasks,
+      guestList:
+        Array.isArray(planCandidate?.guestList) && planCandidate.guestList.length > 0
+          ? planCandidate.guestList.map((g, idx) => ({
+              id: g.id || `g-${idx + 1}`,
+              name: g.name || `Guest ${idx + 1}`,
+              category: g.category || 'Friends',
+              rsvpStatus: g.rsvpStatus || 'Pending',
+              dietary: g.dietary || 'Standard',
+              plusOne: Boolean(g.plusOne),
+            }))
+          : fallbackSuite.detailedPlans[fallbackConcept.id].guestList,
+      vendorDirectory:
+        Array.isArray(planCandidate?.vendorDirectory) && planCandidate.vendorDirectory.length > 0
+          ? planCandidate.vendorDirectory.map((v, idx) => ({
+              id: v.id || `v-${idx + 1}`,
+              name: v.name || `Vendor ${idx + 1}`,
+              service: v.service || 'Service',
+              estimatedCost: Number(v.estimatedCost) || 500,
+              actualCost: v.actualCost !== undefined && v.actualCost !== null ? Number(v.actualCost) : null,
+              status: v.status || 'Proposed',
+              contact: v.contact || 'contact@celebration.local',
+            }))
+          : fallbackSuite.detailedPlans[fallbackConcept.id].vendorDirectory,
+    };
+  }
+
+  const selectedConceptId =
+    typeof parsed.selectedConceptId === 'string' && repairedPlans[parsed.selectedConceptId]
+      ? parsed.selectedConceptId
+      : repairedConcepts[0].id;
+
+  return {
+    brief,
+    concepts: repairedConcepts,
+    selectedConceptId,
+    detailedPlans: repairedPlans,
+    generatedAt: new Date().toISOString(),
+    isFallback: false,
+  };
+}
+
 function cleanAndParseJson(rawText: string, brief: EventBrief): GeneratedPlanSuite | null {
   if (!rawText) return null;
 
@@ -133,24 +287,8 @@ function cleanAndParseJson(rawText: string, brief: EventBrief): GeneratedPlanSui
   }
 
   try {
-    const parsed = JSON.parse(cleanText) as Partial<GeneratedPlanSuite>;
-    if (
-      !Array.isArray(parsed.concepts) ||
-      parsed.concepts.length < 3 ||
-      !parsed.detailedPlans ||
-      typeof parsed.detailedPlans !== 'object'
-    ) {
-      return null;
-    }
-
-    return {
-      brief,
-      concepts: parsed.concepts,
-      selectedConceptId: parsed.selectedConceptId || parsed.concepts[0]?.id || 'concept-1',
-      detailedPlans: parsed.detailedPlans,
-      generatedAt: new Date().toISOString(),
-      isFallback: false,
-    };
+    const parsed = JSON.parse(cleanText) as Record<string, unknown>;
+    return validateAndRepairPlanSuite(parsed, brief);
   } catch {
     return null;
   }
@@ -164,21 +302,21 @@ export async function generateEventPlanWithGemini(
     return generateMockPlanSuite(brief);
   }
 
-  const apiKey = (customApiKey && customApiKey.trim().length > 10)
-    ? customApiKey.trim()
-    : process.env.GEMINI_API_KEY;
+  const apiKey =
+    customApiKey && customApiKey.trim().length > 10
+      ? customApiKey.trim()
+      : process.env.GEMINI_API_KEY;
 
   if (!apiKey || apiKey.trim() === '') {
     return generateMockPlanSuite(brief);
   }
 
   const prompt = buildEventPrompt(brief);
-  const modelsToTry = [PRIMARY_MODEL, SECONDARY_MODEL, TERTIARY_MODEL];
 
   try {
     const ai = new GoogleGenAI({ apiKey });
 
-    for (const model of modelsToTry) {
+    for (const model of CANDIDATE_MODELS) {
       try {
         const rawJsonText = await executeModelInference(ai, model, prompt, REQUEST_TIMEOUT_MS);
         const parsed = cleanAndParseJson(rawJsonText, brief);

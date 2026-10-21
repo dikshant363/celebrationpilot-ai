@@ -66,7 +66,8 @@ export function GlobalNav() {
           <button
             type="button"
             onClick={() => setIsApiKeyModalOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border border-[#d2d2d7] bg-white hover:bg-[#f5f5f7] text-[#1d1d1f] transition-all cursor-pointer shadow-2xs"
+            aria-label="Configure Custom Google Gemini API Key"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border border-[#d2d2d7] bg-white hover:bg-[#f5f5f7] text-[#1d1d1f] transition-all cursor-pointer shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3]"
             title="Configure Custom Google Gemini API Key"
           >
             <Key className="w-3.5 h-3.5 text-[#0071e3]" />

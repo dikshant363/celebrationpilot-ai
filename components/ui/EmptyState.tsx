@@ -26,7 +26,7 @@ export function EmptyState({
         {icon || <Sparkles className="w-7 h-7" />}
       </div>
       <h3 className="text-lg font-semibold text-[#1d1d1f] mb-2">{title}</h3>
-      <p className="text-sm text-[#86868b] mb-6 leading-relaxed">{description}</p>
+      <p className="text-sm text-[#555555] mb-6 leading-relaxed">{description}</p>
       {actionText && (
         actionHref ? (
           <Link href={actionHref}>

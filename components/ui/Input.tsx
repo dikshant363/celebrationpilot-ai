@@ -9,7 +9,10 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, helper, id, ...props }, ref) => {
-    const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
+    const generatedId = React.useId();
+    const inputId = id || (label ? label.toLowerCase().replace(/[^a-z0-9]+/g, '-') : generatedId);
+    const errorId = `${inputId}-error`;
+    const helperId = `${inputId}-helper`;
 
     return (
       <div className="w-full space-y-1.5 text-left">
@@ -21,17 +24,23 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           id={inputId}
           ref={ref}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? errorId : helper ? helperId : undefined}
           className={cn(
-            'w-full px-4 py-2.5 text-sm bg-white border border-[#d2d2d7] rounded-xl text-[#1d1d1f] placeholder-[#86868b] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#0071e3] focus:border-transparent',
-            error && 'border-[#ff3b30] focus:ring-[#ff3b30]',
+            'w-full px-4 py-2.5 text-sm bg-white border border-[#d2d2d7] rounded-xl text-[#1d1d1f] placeholder-[#555555] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#0071e3] focus:border-transparent',
+            error && 'border-[#d93025] focus:ring-[#d93025]',
             className
           )}
           {...props}
         />
         {error ? (
-          <p className="text-xs text-[#ff3b30] font-medium">{error}</p>
+          <p id={errorId} role="alert" className="text-xs text-[#d93025] font-medium">
+            {error}
+          </p>
         ) : helper ? (
-          <p className="text-xs text-[#86868b]">{helper}</p>
+          <p id={helperId} className="text-xs text-[#555555]">
+            {helper}
+          </p>
         ) : null}
       </div>
     );

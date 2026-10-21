@@ -53,14 +53,14 @@ test.describe('E2E: CelebrationPilot AI Complete Journey', () => {
     await expect(page.getByText(/Master Run of Show/i)).toBeVisible();
 
     // Test switching tabs
-    await page.getByRole('button', { name: /Budget & Math/i }).click();
+    await page.getByRole('tab', { name: /Budget & Math/i }).click();
     await expect(page.getByText(/Total Budget/i)).toBeVisible();
     await expect(page.getByText(/Category Budget Allocation/i)).toBeVisible();
 
-    await page.getByRole('button', { name: /Checklist & Tasks/i }).click();
+    await page.getByRole('tab', { name: /Checklist & Tasks/i }).click();
     await expect(page.getByText(/Milestone Checklist & Tasks/i)).toBeVisible();
 
-    await page.getByRole('button', { name: /Guests & RSVP/i }).click();
+    await page.getByRole('tab', { name: /Guests & RSVP/i }).click();
     await expect(page.getByText(/Guest List & RSVP Tracking/i)).toBeVisible();
 
     // 9. Navigate to Export Dossier

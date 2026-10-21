@@ -14,7 +14,7 @@ test.describe('E2E: Workspace State Mutations & Deterministic Math', () => {
     await expect(page).toHaveURL(/.*\/workspace/);
 
     // 4. Test Task Creation
-    await page.getByRole('button', { name: /Checklist & Tasks/i }).click();
+    await page.getByRole('tab', { name: /Checklist & Tasks/i }).click();
     await page.getByRole('button', { name: /Add Task/i }).click();
     await page.getByPlaceholder(/Task description\.\.\./i).fill('Confirm fireworks permit');
     await page.getByRole('button', { name: /Save Task/i }).click();
@@ -22,7 +22,7 @@ test.describe('E2E: Workspace State Mutations & Deterministic Math', () => {
     await expect(page.getByText('Confirm fireworks permit')).toBeVisible();
 
     // 5. Test Guest Creation
-    await page.getByRole('button', { name: /Guests & RSVP/i }).click();
+    await page.getByRole('tab', { name: /Guests & RSVP/i }).click();
     await page.getByRole('button', { name: /Add Guest/i }).click();
     await page.getByPlaceholder(/Guest Full Name\.\.\./i).fill('Celebrity Host Guest');
     await page.getByRole('button', { name: /Save Guest/i }).click();

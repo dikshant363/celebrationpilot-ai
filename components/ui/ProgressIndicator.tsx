@@ -11,15 +11,24 @@ export function ProgressIndicator({
   totalSteps,
   stepLabels = [],
 }: ProgressIndicatorProps) {
+  const currentLabel = stepLabels[currentStep - 1] || '';
+
   return (
-    <div className="w-full">
+    <div
+      className="w-full"
+      role="progressbar"
+      aria-valuenow={currentStep}
+      aria-valuemin={1}
+      aria-valuemax={totalSteps}
+      aria-valuetext={`Step ${currentStep} of ${totalSteps}${currentLabel ? `: ${currentLabel}` : ''}`}
+    >
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-[#86868b]">
+        <span className="text-xs font-semibold uppercase tracking-wider text-[#555555]">
           Step {currentStep} of {totalSteps}
         </span>
-        {stepLabels[currentStep - 1] && (
+        {currentLabel && (
           <span className="text-xs font-medium text-[#1d1d1f]">
-            {stepLabels[currentStep - 1]}
+            {currentLabel}
           </span>
         )}
       </div>

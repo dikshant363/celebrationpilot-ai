@@ -54,7 +54,7 @@ export default function WorkspacePage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-[#e5e5ea] pb-6 mb-8">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#34c759]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#137333]" />
             <span className="text-xs font-semibold uppercase tracking-wider text-[#0071e3]">
               Active Celebration Workspace
             </span>
@@ -62,7 +62,7 @@ export default function WorkspacePage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f]">
             {brief.eventTitle}
           </h1>
-          <p className="text-xs text-[#86868b] mt-1">
+          <p className="text-xs text-[#555555] mt-1">
             {brief.eventType} in {brief.city} • {brief.targetDate} • {brief.guestCount} Guests
           </p>
         </div>
@@ -71,8 +71,12 @@ export default function WorkspacePage() {
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2 bg-white border border-[#d2d2d7] rounded-xl px-3 py-1.5 text-xs">
             <Layers className="w-4 h-4 text-[#0071e3]" />
-            <span className="text-[#86868b] font-medium">Plan:</span>
+            <label htmlFor="concept-plan-select" className="text-[#555555] font-medium">
+              Plan:
+            </label>
             <select
+              id="concept-plan-select"
+              aria-label="Switch celebration concept"
               value={selectedConceptId}
               onChange={(e) => selectConcept(e.target.value)}
               className="font-semibold text-[#1d1d1f] bg-transparent focus:outline-none cursor-pointer"
@@ -95,15 +99,23 @@ export default function WorkspacePage() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex items-center gap-2 border-b border-[#e5e5ea] mb-8 overflow-x-auto pb-1">
+      <div
+        role="tablist"
+        aria-label="Workspace Sections"
+        className="flex items-center gap-2 border-b border-[#e5e5ea] mb-8 overflow-x-auto pb-1"
+      >
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
+              role="tab"
+              id={`workspace-tab-${tab.id}`}
+              aria-selected={isActive}
+              aria-controls={`workspace-panel-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-all cursor-pointer whitespace-nowrap select-none ${
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-all cursor-pointer whitespace-nowrap select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] ${
                 isActive
                   ? 'border-[#0071e3] text-[#0071e3]'
                   : 'border-transparent text-[#555555] hover:text-[#1d1d1f] hover:border-[#d2d2d7]'
@@ -117,7 +129,12 @@ export default function WorkspacePage() {
       </div>
 
       {/* Tab Contents */}
-      <div className="animate-in fade-in duration-150">
+      <div
+        role="tabpanel"
+        id={`workspace-panel-${activeTab}`}
+        aria-labelledby={`workspace-tab-${activeTab}`}
+        className="animate-in fade-in duration-150"
+      >
         {activeTab === 'schedule' && <ScheduleTimeline schedule={currentPlan.schedule} />}
 
         {activeTab === 'budget' && (

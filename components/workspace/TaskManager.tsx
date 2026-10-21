@@ -51,12 +51,12 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e5e5ea] pb-5">
         <div>
           <h3 className="text-lg font-bold text-[#1d1d1f]">Milestone Checklist & Tasks</h3>
-          <p className="text-xs text-[#86868b]">
+          <p className="text-xs text-[#555555]">
             Track critical countdown deliverables across every pre-celebration phase
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="text-xs text-[#555555]">
+          <div className="text-xs text-[#333333]">
             <span className="font-bold text-[#0071e3]">{completedCount}</span> of {tasks.length} Done ({progressPercent}%)
           </div>
           <Button size="sm" variant="outline" onClick={() => setIsAdding(!isAdding)}>
@@ -127,11 +127,12 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
 
       {/* Phase Filters */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-        <Filter className="w-3.5 h-3.5 text-[#86868b] mr-1 shrink-0" />
+        <Filter className="w-3.5 h-3.5 text-[#555555] mr-1 shrink-0" />
         {phases.map((p) => (
           <button
             key={p}
             onClick={() => setFilterPhase(p)}
+            aria-pressed={filterPhase === p}
             className={`px-3 py-1 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
               filterPhase === p
                 ? 'bg-[#1d1d1f] text-white shadow-2xs'
@@ -146,7 +147,7 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
       {/* Task List */}
       <div className="space-y-2">
         {filteredTasks.length === 0 ? (
-          <div className="text-center py-8 text-xs text-[#86868b]">
+          <div className="text-center py-8 text-xs text-[#555555]">
             No tasks found in this timeline phase.
           </div>
         ) : (
@@ -163,16 +164,26 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <button type="button" className="text-[#0071e3] p-0.5">
+                  <button
+                    type="button"
+                    role="checkbox"
+                    aria-checked={isCompleted}
+                    aria-label={
+                      isCompleted
+                        ? `Mark task "${task.title}" as incomplete`
+                        : `Mark task "${task.title}" as completed`
+                    }
+                    className="text-[#0071e3] p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] rounded"
+                  >
                     {isCompleted ? (
-                      <CheckSquare className="w-4 h-4 text-[#34c759]" />
+                      <CheckSquare className="w-4 h-4 text-[#137333]" />
                     ) : (
-                      <Square className="w-4 h-4 text-[#86868b]" />
+                      <Square className="w-4 h-4 text-[#555555]" />
                     )}
                   </button>
                   <span
                     className={`text-xs font-medium ${
-                      isCompleted ? 'line-through text-[#86868b]' : 'text-[#1d1d1f]'
+                      isCompleted ? 'line-through text-[#636366]' : 'text-[#1d1d1f]'
                     }`}
                   >
                     {task.title}
@@ -191,7 +202,7 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
                   >
                     {task.priority}
                   </Badge>
-                  <span className="text-[11px] text-[#86868b] hidden sm:inline">
+                  <span className="text-[11px] text-[#555555] hidden sm:inline">
                     {task.duePhase}
                   </span>
                 </div>

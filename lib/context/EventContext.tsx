@@ -16,6 +16,8 @@ import {
   TaskItem,
   GuestItem,
   BudgetItem,
+  ScheduleItem,
+  VendorItem,
   RSVPStatus,
 } from '../types/event';
 import { eventStore } from './eventStore';
@@ -36,6 +38,10 @@ interface EventContextType {
   updateGuestRSVP: (guestId: string, status: RSVPStatus) => void;
   addGuest: (guest: Omit<GuestItem, 'id'>) => void;
   updateBudgetItem: (itemId: string, updates: Partial<BudgetItem>) => void;
+  addBudgetItem: (item: Omit<BudgetItem, 'id'>) => void;
+  addScheduleItem: (item: ScheduleItem) => void;
+  updateVendor: (vendorId: string, updates: Partial<VendorItem>) => void;
+  addVendor: (vendor: Omit<VendorItem, 'id'>) => void;
   userApiKey: string;
   setUserApiKey: (key: string) => void;
   isApiKeyModalOpen: boolean;
@@ -58,6 +64,10 @@ const defaultContext: EventContextType = {
   updateGuestRSVP: () => {},
   addGuest: () => {},
   updateBudgetItem: () => {},
+  addBudgetItem: () => {},
+  addScheduleItem: () => {},
+  updateVendor: () => {},
+  addVendor: () => {},
   userApiKey: '',
   setUserApiKey: () => {},
   isApiKeyModalOpen: false,
@@ -161,6 +171,10 @@ export function EventProvider({ children }: { children: ReactNode }) {
         updateGuestRSVP: eventStore.updateGuestRSVP,
         addGuest: eventStore.addGuest,
         updateBudgetItem: eventStore.updateBudgetItem,
+        addBudgetItem: eventStore.addBudgetItem,
+        addScheduleItem: eventStore.addScheduleItem,
+        updateVendor: eventStore.updateVendor,
+        addVendor: eventStore.addVendor,
         userApiKey: store.userApiKey,
         setUserApiKey,
         isApiKeyModalOpen,

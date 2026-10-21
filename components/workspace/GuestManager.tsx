@@ -43,7 +43,7 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e5e5ea] pb-5">
         <div>
           <h3 className="text-lg font-bold text-[#1d1d1f]">Guest List & RSVP Tracking</h3>
-          <p className="text-xs text-[#86868b]">
+          <p className="text-xs text-[#555555]">
             Manage attendance verification, dietary requirements, and plus-one seating
           </p>
         </div>
@@ -56,12 +56,12 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
       {/* Guest Summary Counters */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3 bg-[#f5f5f7] rounded-xl text-center">
-          <div className="text-[11px] font-semibold text-[#86868b] uppercase">Invited Total</div>
+          <div className="text-[11px] font-semibold text-[#555555] uppercase">Invited Total</div>
           <div className="text-lg font-bold text-[#1d1d1f] mt-0.5">{guests.length}</div>
         </div>
         <div className="p-3 bg-[#eaf8ee] rounded-xl text-center border border-[#b5ecc1]">
-          <div className="text-[11px] font-semibold text-[#28a745] uppercase">Confirmed</div>
-          <div className="text-lg font-bold text-[#28a745] mt-0.5">{confirmed}</div>
+          <div className="text-[11px] font-semibold text-[#137333] uppercase">Confirmed</div>
+          <div className="text-lg font-bold text-[#137333] mt-0.5">{confirmed}</div>
         </div>
         <div className="p-3 bg-[#fef7e6] rounded-xl text-center border border-[#fce3a6]">
           <div className="text-[11px] font-semibold text-[#b06000] uppercase">Pending</div>
@@ -130,7 +130,9 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
         {['All', 'Confirmed', 'Pending', 'Declined'].map((r) => (
           <button
             key={r}
+            type="button"
             onClick={() => setFilterRsvp(r)}
+            aria-pressed={filterRsvp === r}
             className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors ${
               filterRsvp === r
                 ? 'bg-[#1d1d1f] text-white'
@@ -176,11 +178,14 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
                       return (
                         <button
                           key={status}
+                          type="button"
                           onClick={() => updateGuestRSVP(guest.id, status)}
+                          aria-label={`Set RSVP for ${guest.name} to ${status}`}
+                          aria-pressed={isActive}
                           className={`px-2 py-0.5 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
                             isActive
                               ? status === 'Confirmed'
-                                ? 'bg-[#28a745] text-white'
+                                ? 'bg-[#137333] text-white'
                                 : status === 'Pending'
                                 ? 'bg-[#b06000] text-white'
                                 : 'bg-[#d93025] text-white'
