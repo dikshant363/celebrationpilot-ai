@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Sparkles, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Sparkles, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { useEvent } from '@/lib/context/EventContext';
@@ -125,19 +125,22 @@ export default function PlannerPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
       {/* Header */}
       <div className="text-center mb-8">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/[0.04] text-xs font-semibold text-[#555555] mb-2">
+          <span>Step-by-Step Architecture</span>
+        </div>
         <h1 className="text-3xl font-bold text-[#1d1d1f] tracking-tight">
           Celebration Brief Wizard
         </h1>
-        <p className="text-sm text-[#555555] mt-1.5">
+        <p className="text-sm text-[#555555] mt-1.5 max-w-lg mx-auto">
           Enter your celebration constraints to generate 3 tailored concepts and master run of show.
         </p>
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-white border border-[#d2d2d7] rounded-2xl p-5 mb-8 shadow-xs">
+      <div className="bg-white border border-[#e5e5ea] rounded-2xl p-5 mb-8 shadow-xs">
         <ProgressIndicator currentStep={step} totalSteps={3} stepLabels={STEP_LABELS} />
       </div>
 
@@ -209,10 +212,20 @@ export default function PlannerPage() {
               size="lg"
               data-testid="generate-plan-button"
               aria-label="Generate 3 Celebration Concepts"
+              disabled={isGenerating}
               onClick={handleSubmit}
             >
-              <Sparkles className="w-4 h-4 mr-2" />
-              Generate 3 Celebration Concepts
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Generating Concepts...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Generate 3 Celebration Concepts
+                </>
+              )}
             </Button>
           )}
         </div>

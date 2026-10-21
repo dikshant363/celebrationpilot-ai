@@ -10,6 +10,10 @@ import {
   Printer,
   Download,
   ArrowLeft,
+  Calendar,
+  Users,
+  DollarSign,
+  ShieldCheck,
 } from 'lucide-react';
 import {
   exportEventPlanToPrint,
@@ -45,7 +49,7 @@ export default function ExportPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Top Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e5e5ea] pb-6 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e5e5ea] pb-6 mb-8 print:hidden">
         <div>
           <Link
             href="/workspace"
@@ -54,7 +58,7 @@ export default function ExportPage() {
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Workspace
           </Link>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f]">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1d1d1f]">
             Printable Celebration Dossier
           </h1>
           <p className="text-xs text-[#555555] mt-1">
@@ -75,57 +79,67 @@ export default function ExportPage() {
       </div>
 
       {/* Printable Preview Sheet */}
-      <Card className="p-8 sm:p-12 space-y-8 bg-white border border-[#d2d2d7] shadow-md">
+      <Card className="p-8 sm:p-12 space-y-8 bg-white border border-[#e5e5ea] shadow-sm rounded-3xl print:border-none print:shadow-none print:p-0">
         {/* Dossier Header */}
         <div className="border-b-2 border-[#0071e3] pb-6">
-          <div className="inline-block px-3 py-1 rounded-full bg-[#e8f2fe] text-[#0071e3] text-[11px] font-bold uppercase tracking-wider mb-2">
-            CelebrationPilot AI — Master Event Dossier
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0071e3]/10 text-[#0071e3] text-[11px] font-bold uppercase tracking-wider mb-2.5">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>CelebrationPilot AI — Master Event Dossier</span>
           </div>
-          <h2 className="text-3xl font-bold text-[#1d1d1f]">{brief.eventTitle}</h2>
-          <p className="text-sm text-[#555555] mt-1">
+          <h2 className="text-3xl font-bold tracking-tight text-[#1d1d1f]">{brief.eventTitle}</h2>
+          <p className="text-sm text-[#555555] mt-1 font-medium">
             {currentPlan.title} • {currentPlan.tagline}
           </p>
         </div>
 
         {/* Key Parameters Matrix */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-[#fbfbfd] p-4 rounded-xl border border-[#e5e5ea]">
-            <div className="text-[11px] uppercase font-semibold text-[#555555]">Date & City</div>
-            <div className="text-sm font-bold text-[#1d1d1f] mt-1">
-              {brief.targetDate} • {brief.city}
+          <div className="bg-[#fbfbfd] p-4 sm:p-5 rounded-2xl border border-[#e5e5ea]">
+            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-semibold text-[#555555]">
+              <Calendar className="w-3.5 h-3.5 text-[#0071e3]" />
+              Date & City
             </div>
-            <div className="text-xs text-[#555555] mt-0.5">{brief.eventType}</div>
+            <div className="text-base font-bold text-[#1d1d1f] mt-1.5">
+              {brief.targetDate}
+            </div>
+            <div className="text-xs text-[#555555] mt-0.5">{brief.city} • {brief.eventType}</div>
           </div>
 
-          <div className="bg-[#fbfbfd] p-4 rounded-xl border border-[#e5e5ea]">
-            <div className="text-[11px] uppercase font-semibold text-[#555555]">Venue & Scale</div>
-            <div className="text-sm font-bold text-[#1d1d1f] mt-1">
+          <div className="bg-[#fbfbfd] p-4 sm:p-5 rounded-2xl border border-[#e5e5ea]">
+            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-semibold text-[#555555]">
+              <Users className="w-3.5 h-3.5 text-[#0071e3]" />
+              Venue & Scale
+            </div>
+            <div className="text-base font-bold text-[#1d1d1f] mt-1.5">
               {brief.venueType}
             </div>
             <div className="text-xs text-[#555555] mt-0.5">{brief.guestCount} Attendees ({confirmedGuests} Confirmed)</div>
           </div>
 
-          <div className="bg-[#fbfbfd] p-4 rounded-xl border border-[#e5e5ea]">
-            <div className="text-[11px] uppercase font-semibold text-[#555555]">Financial Envelope</div>
-            <div className="text-sm font-bold text-[#0071e3] mt-1">
+          <div className="bg-[#fbfbfd] p-4 sm:p-5 rounded-2xl border border-[#e5e5ea]">
+            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-semibold text-[#555555]">
+              <DollarSign className="w-3.5 h-3.5 text-[#0071e3]" />
+              Financial Envelope
+            </div>
+            <div className="text-base font-bold text-[#0071e3] mt-1.5">
               {brief.currency} {budgetMetrics.totalSpent.toLocaleString()} / {brief.currency} {brief.budgetTotal.toLocaleString()}
             </div>
-            <div className="text-xs text-[#137333] font-semibold mt-0.5">{budgetMetrics.verdict} Envelope</div>
+            <div className="text-xs text-[#34c759] font-semibold mt-0.5">{budgetMetrics.verdict} Envelope</div>
           </div>
         </div>
 
         {/* Master Schedule Table */}
         <div className="space-y-3">
-          <h3 className="text-base font-bold text-[#1d1d1f] border-b border-[#e5e5ea] pb-2">
+          <h3 className="text-base font-bold text-[#1d1d1f] border-b border-[#e5e5ea] pb-2 tracking-tight">
             Run of Show Execution Timeline
           </h3>
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="bg-[#f5f5f7] border-b border-[#e5e5ea] text-[#1d1d1f] font-semibold">
-                <th className="py-2 px-3 w-20">Time</th>
-                <th className="py-2 px-3 w-48">Activity</th>
-                <th className="py-2 px-3">Operational Notes</th>
-                <th className="py-2 px-3 w-36">Lead</th>
+                <th className="py-2.5 px-3 w-20">Time</th>
+                <th className="py-2.5 px-3 w-48">Activity</th>
+                <th className="py-2.5 px-3">Operational Notes</th>
+                <th className="py-2.5 px-3 w-36">Lead</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e5e5ea]">
@@ -134,7 +148,7 @@ export default function ExportPage() {
                   <td className="py-2.5 px-3 font-mono font-bold text-[#0071e3]">{item.time}</td>
                   <td className="py-2.5 px-3 font-semibold text-[#1d1d1f]">{item.title}</td>
                   <td className="py-2.5 px-3 text-[#555555]">{item.description}</td>
-                  <td className="py-2.5 px-3 text-[#333333]">{item.lead}</td>
+                  <td className="py-2.5 px-3 text-[#1d1d1f] font-medium">{item.lead}</td>
                 </tr>
               ))}
             </tbody>
@@ -143,17 +157,17 @@ export default function ExportPage() {
 
         {/* Budget Allocation Table */}
         <div className="space-y-3">
-          <h3 className="text-base font-bold text-[#1d1d1f] border-b border-[#e5e5ea] pb-2">
+          <h3 className="text-base font-bold text-[#1d1d1f] border-b border-[#e5e5ea] pb-2 tracking-tight">
             Budget Quotas & Committed Expenditure
           </h3>
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="bg-[#f5f5f7] border-b border-[#e5e5ea] text-[#1d1d1f] font-semibold">
-                <th className="py-2 px-3">Category</th>
-                <th className="py-2 px-3">Allocated ({brief.currency})</th>
-                <th className="py-2 px-3">Committed ({brief.currency})</th>
-                <th className="py-2 px-3">Verification</th>
-                <th className="py-2 px-3">Notes</th>
+                <th className="py-2.5 px-3">Category</th>
+                <th className="py-2.5 px-3">Allocated ({brief.currency})</th>
+                <th className="py-2.5 px-3">Committed ({brief.currency})</th>
+                <th className="py-2.5 px-3">Verification</th>
+                <th className="py-2.5 px-3">Notes</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e5e5ea]">
@@ -178,16 +192,16 @@ export default function ExportPage() {
 
         {/* Milestone Tasks Table */}
         <div className="space-y-3">
-          <h3 className="text-base font-bold text-[#1d1d1f] border-b border-[#e5e5ea] pb-2">
+          <h3 className="text-base font-bold text-[#1d1d1f] border-b border-[#e5e5ea] pb-2 tracking-tight">
             Key Milestone Deliverables
           </h3>
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="bg-[#f5f5f7] border-b border-[#e5e5ea] text-[#1d1d1f] font-semibold">
-                <th className="py-2 px-3 w-32">Timeline Phase</th>
-                <th className="py-2 px-3">Task Deliverable</th>
-                <th className="py-2 px-3 w-28">Priority</th>
-                <th className="py-2 px-3 w-28">Status</th>
+                <th className="py-2.5 px-3 w-32">Timeline Phase</th>
+                <th className="py-2.5 px-3">Task Deliverable</th>
+                <th className="py-2.5 px-3 w-28">Priority</th>
+                <th className="py-2.5 px-3 w-28">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e5e5ea]">

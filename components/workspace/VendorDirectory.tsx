@@ -67,35 +67,35 @@ export function VendorDirectory({
   const bookedCount = vendors.filter((v) => v.status === 'Booked').length;
 
   return (
-    <Card className="space-y-6">
+    <Card className="space-y-6 p-6 sm:p-8 bg-white border border-[#e5e5ea] rounded-2xl shadow-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e5e5ea] pb-5">
         <div>
-          <h3 className="text-lg font-bold text-[#1d1d1f]">Vendor & Partner Directory</h3>
-          <p className="text-xs text-[#555555]">
+          <h3 className="text-xl font-bold tracking-tight text-[#1d1d1f]">Vendor & Partner Directory</h3>
+          <p className="text-xs text-[#555555] mt-0.5">
             Track verified supplier contracts, negotiated quotes, and direct liaison contacts
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="text-[11px] text-[#333333] bg-[#f5f5f7] px-3 py-1 rounded-full border border-[#d2d2d7]">
+          <div className="text-[11px] font-medium text-[#555555] bg-[#f5f5f7] px-3.5 py-1.5 rounded-full border border-[#e5e5ea]">
             {bookedCount} of {vendors.length} Contracts Booked
           </div>
           <Button size="sm" variant="outline" onClick={() => setIsAdding(!isAdding)}>
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 mr-1" />
             Add Vendor
           </Button>
         </div>
       </div>
 
-      <div className="bg-[#fbfbfd] p-3 rounded-xl border border-[#e5e5ea] text-xs text-[#333333] flex items-center gap-2">
+      <div className="bg-[#fbfbfd] p-3.5 rounded-xl border border-[#e5e5ea] text-xs text-[#333333] flex items-center gap-2.5 shadow-2xs">
         <CheckCircle2 className="w-4 h-4 text-[#0071e3] shrink-0" />
-        <span>
+        <span className="leading-relaxed">
           CelebrationPilot AI strictly separates preliminary market estimates from verified contract quotes to prevent surprise billing.
         </span>
       </div>
 
       {/* Add Vendor Form */}
       {isAdding && (
-        <form onSubmit={handleAddVendor} className="bg-[#f5f5f7] p-4 rounded-2xl border border-[#e5e5ea] space-y-3">
+        <form onSubmit={handleAddVendor} className="bg-[#fbfbfd] p-4 sm:p-5 rounded-2xl border border-[#e5e5ea] space-y-3.5 shadow-2xs">
           <div className="text-xs font-semibold text-[#1d1d1f]">Add New Supplier / Vendor</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
             <input
@@ -103,7 +103,7 @@ export function VendorDirectory({
               placeholder="Vendor / Company Name"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all"
               required
             />
             <input
@@ -111,7 +111,7 @@ export function VendorDirectory({
               placeholder="Service Scope (e.g. Florals)"
               value={newService}
               onChange={(e) => setNewService(e.target.value)}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all"
               required
             />
             <input
@@ -119,12 +119,12 @@ export function VendorDirectory({
               placeholder="Estimated Cost"
               value={newEstCost}
               onChange={(e) => setNewEstCost(Number(e.target.value))}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all"
             />
             <select
               value={newStatus}
               onChange={(e) => setNewStatus(e.target.value as VendorStatus)}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl font-medium text-[#1d1d1f]"
             >
               <option value="Proposed">Proposed</option>
               <option value="Contacted">Contacted</option>
@@ -136,7 +136,7 @@ export function VendorDirectory({
               placeholder="Contact Email"
               value={newContact}
               onChange={(e) => setNewContact(e.target.value)}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all"
             />
           </div>
           <div className="flex justify-end gap-2 pt-1">
@@ -164,7 +164,7 @@ export function VendorDirectory({
           </thead>
           <tbody className="divide-y divide-[#e5e5ea]">
             {vendors.map((vendor) => (
-              <tr key={vendor.id} className="hover:bg-[#fbfbfd]">
+              <tr key={vendor.id} className="hover:bg-[#fbfbfd] transition-colors">
                 <td className="py-3 px-3 font-semibold text-[#1d1d1f]">{vendor.name}</td>
                 <td className="py-3 px-3 text-[#555555]">{vendor.service}</td>
                 <td className="py-3 px-3 text-[#555555]">
@@ -178,13 +178,13 @@ export function VendorDirectory({
                         placeholder="Cost"
                         value={actualCostInput}
                         onChange={(e) => setActualCostInput(e.target.value)}
-                        className="w-24 px-2 py-1 text-xs border border-[#0071e3] rounded-md font-mono"
+                        className="w-24 px-2 py-1 text-xs border border-[#0071e3] rounded-lg font-mono focus:outline-none focus:ring-1 focus:ring-[#0071e3]"
                         aria-label={`Actual cost for ${vendor.name}`}
                       />
                       <button
                         type="button"
                         onClick={() => handleSaveEdit(vendor.id)}
-                        className="p-1 text-[#0071e3] hover:bg-[#e8f2fe] rounded"
+                        className="p-1.5 text-[#0071e3] hover:bg-[#0071e3]/10 rounded-lg transition-colors cursor-pointer"
                         aria-label="Save actual cost"
                       >
                         <Check className="w-3.5 h-3.5" />
@@ -195,7 +195,7 @@ export function VendorDirectory({
                       {currency} {vendor.actualCost.toLocaleString()}
                     </span>
                   ) : (
-                    <span className="text-[#636366] italic">Pending Quote</span>
+                    <span className="text-[#86868b] italic">Pending Quote</span>
                   )}
                 </td>
                 <td className="py-3 px-3">
@@ -203,7 +203,7 @@ export function VendorDirectory({
                     value={vendor.status}
                     onChange={(e) => handleStatusChange(vendor.id, e.target.value as VendorStatus)}
                     aria-label={`Status for ${vendor.name}`}
-                    className="px-2 py-1 text-[11px] font-semibold rounded-lg border border-[#d2d2d7] bg-white cursor-pointer"
+                    className="px-2.5 py-1 text-[11px] font-semibold rounded-lg border border-[#d2d2d7] bg-white cursor-pointer transition-colors"
                   >
                     <option value="Proposed">Proposed</option>
                     <option value="Contacted">Contacted</option>
@@ -217,7 +217,7 @@ export function VendorDirectory({
                       <button
                         type="button"
                         onClick={() => handleStartEdit(vendor)}
-                        className="p-1 rounded-md text-[#555555] hover:text-[#0071e3] hover:bg-[#f5f5f7]"
+                        className="p-1.5 rounded-lg text-[#555555] hover:text-[#0071e3] hover:bg-black/[0.04] transition-colors cursor-pointer"
                         aria-label={`Edit contract quote for ${vendor.name}`}
                         title="Edit contract quote"
                       >

@@ -5,7 +5,7 @@ import { TaskItem } from '@/lib/types/event';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { CheckSquare, Square, Plus, Filter } from 'lucide-react';
+import { CheckSquare, Square, Plus, Filter, User } from 'lucide-react';
 import { useEvent } from '@/lib/context/EventContext';
 
 export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
@@ -47,20 +47,20 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
   const phases = ['All', '4 Weeks Prior', '2 Weeks Prior', '1 Week Prior', 'Day Of', 'Post-Event'];
 
   return (
-    <Card className="space-y-6">
+    <Card className="space-y-6 p-6 sm:p-8 bg-white border border-[#e5e5ea] rounded-2xl shadow-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e5e5ea] pb-5">
         <div>
-          <h3 className="text-lg font-bold text-[#1d1d1f]">Milestone Checklist & Tasks</h3>
-          <p className="text-xs text-[#555555]">
+          <h3 className="text-xl font-bold tracking-tight text-[#1d1d1f]">Milestone Checklist & Tasks</h3>
+          <p className="text-xs text-[#555555] mt-0.5">
             Track critical countdown deliverables across every pre-celebration phase
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="text-xs text-[#333333]">
+          <div className="text-xs text-[#555555] bg-[#f5f5f7] border border-[#e5e5ea] px-3.5 py-1.5 rounded-full">
             <span className="font-bold text-[#0071e3]">{completedCount}</span> of {tasks.length} Done ({progressPercent}%)
           </div>
           <Button size="sm" variant="outline" onClick={() => setIsAdding(!isAdding)}>
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 mr-1" />
             Add Task
           </Button>
         </div>
@@ -68,7 +68,7 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
 
       {/* Add Task Box */}
       {isAdding && (
-        <form onSubmit={handleCreateTask} className="bg-[#f5f5f7] p-4 rounded-2xl border border-[#e5e5ea] space-y-3">
+        <form onSubmit={handleCreateTask} className="bg-[#fbfbfd] p-4 sm:p-5 rounded-2xl border border-[#e5e5ea] space-y-3.5 shadow-2xs">
           <div className="text-xs font-semibold text-[#1d1d1f]">New Milestone Task</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             <input
@@ -76,7 +76,7 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
               placeholder="Task description..."
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              className="sm:col-span-2 px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+              className="sm:col-span-2 px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all"
               required
             />
             <input
@@ -84,19 +84,19 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
               placeholder="Category..."
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all"
             />
             <input
               type="text"
               placeholder="Assignee lead..."
               value={newAssignee}
               onChange={(e) => setNewAssignee(e.target.value)}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all"
             />
             <select
               value={newPhase}
               onChange={(e) => setNewPhase(e.target.value as TaskItem['duePhase'])}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl"
             >
               <option value="4 Weeks Prior">4 Weeks Prior</option>
               <option value="2 Weeks Prior">2 Weeks Prior</option>
@@ -107,7 +107,7 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
             <select
               value={newPriority}
               onChange={(e) => setNewPriority(e.target.value as TaskItem['priority'])}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl"
             >
               <option value="High">High Priority</option>
               <option value="Medium">Medium Priority</option>
@@ -133,7 +133,7 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
             key={p}
             onClick={() => setFilterPhase(p)}
             aria-pressed={filterPhase === p}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
+            className={`px-3.5 py-1 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
               filterPhase === p
                 ? 'bg-[#1d1d1f] text-white shadow-2xs'
                 : 'bg-[#f5f5f7] text-[#555555] hover:bg-[#e8e8ed]'
@@ -145,9 +145,9 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
       </div>
 
       {/* Task List */}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {filteredTasks.length === 0 ? (
-          <div className="text-center py-8 text-xs text-[#555555]">
+          <div className="text-center py-10 text-xs text-[#555555] bg-[#fbfbfd] rounded-2xl border border-dashed border-[#e5e5ea]">
             No tasks found in this timeline phase.
           </div>
         ) : (
@@ -157,40 +157,37 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
               <div
                 key={task.id}
                 onClick={() => handleToggle(task)}
-                className={`flex items-center justify-between p-3.5 rounded-xl border transition-all cursor-pointer select-none ${
+                className={`flex items-center justify-between p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer select-none ${
                   isCompleted
-                    ? 'bg-[#fafafa] border-[#e5e5ea] opacity-75'
-                    : 'bg-white border-[#d2d2d7] hover:border-[#86868b] hover:shadow-2xs'
+                    ? 'bg-[#fbfbfd] border-[#e5e5ea] opacity-75'
+                    : 'bg-white border-[#e5e5ea] hover:border-[#d2d2d7] shadow-2xs'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    role="checkbox"
-                    aria-checked={isCompleted}
-                    aria-label={
-                      isCompleted
-                        ? `Mark task "${task.title}" as incomplete`
-                        : `Mark task "${task.title}" as completed`
-                    }
-                    className="text-[#0071e3] p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] rounded"
-                  >
+                  <div className="shrink-0 text-[#0071e3]">
                     {isCompleted ? (
-                      <CheckSquare className="w-4 h-4 text-[#137333]" />
+                      <CheckSquare className="w-4 h-4 text-[#34c759]" />
                     ) : (
-                      <Square className="w-4 h-4 text-[#555555]" />
+                      <Square className="w-4 h-4 text-[#86868b]" />
                     )}
-                  </button>
-                  <span
-                    className={`text-xs font-medium ${
-                      isCompleted ? 'line-through text-[#636366]' : 'text-[#1d1d1f]'
-                    }`}
-                  >
-                    {task.title}
-                  </span>
+                  </div>
+                  <div>
+                    <span
+                      className={`text-xs sm:text-sm font-medium ${
+                        isCompleted ? 'line-through text-[#86868b]' : 'text-[#1d1d1f]'
+                      }`}
+                    >
+                      {task.title}
+                    </span>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-[11px] text-[#555555]">{task.category}</span>
+                      <span className="text-[11px] text-[#86868b]">•</span>
+                      <span className="text-[11px] text-[#555555]">{task.duePhase}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0">
                   <Badge
                     variant={
                       task.priority === 'High'
@@ -202,9 +199,10 @@ export function TaskManager({ tasks }: { tasks: TaskItem[] }) {
                   >
                     {task.priority}
                   </Badge>
-                  <span className="text-[11px] text-[#555555] hidden sm:inline">
-                    {task.duePhase}
-                  </span>
+                  <div className="hidden sm:flex items-center gap-1 text-[11px] text-[#555555] bg-[#f5f5f7] px-2.5 py-0.5 rounded-full">
+                    <User className="w-3 h-3 text-[#555555]" />
+                    <span>{task.assignedTo}</span>
+                  </div>
                 </div>
               </div>
             );

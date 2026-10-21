@@ -15,32 +15,32 @@ export interface ConceptCardProps {
 export function ConceptCard({ concept, currency, isSelected, onSelect }: ConceptCardProps) {
   return (
     <Card
-      className={`relative flex flex-col justify-between transition-all duration-200 border-2 ${
+      className={`relative flex flex-col justify-between transition-all duration-300 p-6 sm:p-7 rounded-2xl bg-white ${
         isSelected
-          ? 'border-[#0071e3] shadow-lg ring-2 ring-[#0071e3]/20'
-          : 'border-[#d2d2d7] hover:border-[#86868b]'
+          ? 'border-2 border-[#0071e3] shadow-[0_8px_30px_rgba(0,113,227,0.12)] ring-1 ring-[#0071e3]/20'
+          : 'border border-[#e5e5ea] hover:border-[#d2d2d7] hover:shadow-sm'
       }`}
     >
       {isSelected && (
-        <div className="absolute -top-3 right-6 bg-[#0071e3] text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1">
+        <div className="absolute -top-3 right-6 bg-[#0071e3] text-white text-[11px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1">
           <Check className="w-3 h-3" />
           Active Selection
         </div>
       )}
 
       <div>
-        <div className="flex items-start justify-between gap-3 mb-2">
+        <div className="flex items-start justify-between gap-3 mb-3">
           <Badge variant="blue">{concept.vibe}</Badge>
           <div className="flex items-center gap-1 text-xs font-semibold text-[#137333] bg-[#eaf8ee] px-2.5 py-0.5 rounded-full border border-[#b5ecc1]">
-            <Sparkles className="w-3 h-3" />
-            {concept.feasibilityScore}% Feasibility
+            <Sparkles className="w-3 h-3 text-[#34c759]" />
+            <span>{concept.feasibilityScore}% Feasibility</span>
           </div>
         </div>
 
-        <h3 className="text-xl font-bold text-[#1d1d1f] mb-1.5 leading-snug">
+        <h3 className="text-xl font-bold text-[#1d1d1f] mb-1.5 leading-snug tracking-tight">
           {concept.title}
         </h3>
-        <p className="text-xs text-[#555555] leading-relaxed mb-4">
+        <p className="text-xs text-[#555555] leading-relaxed mb-5">
           {concept.tagline}
         </p>
 
@@ -56,7 +56,7 @@ export function ConceptCard({ concept, currency, isSelected, onSelect }: Concept
         </div>
 
         {/* Catering highlights */}
-        <div className="space-y-3 mb-5">
+        <div className="space-y-2 mb-5">
           <div className="flex items-center gap-2 text-xs font-semibold text-[#1d1d1f] uppercase tracking-wider">
             <Utensils className="w-3.5 h-3.5 text-[#0071e3]" />
             <span>Catering & Hospitality</span>
@@ -72,7 +72,7 @@ export function ConceptCard({ concept, currency, isSelected, onSelect }: Concept
         </div>
 
         {/* Entertainment highlights */}
-        <div className="space-y-3 mb-5">
+        <div className="space-y-2 mb-5">
           <div className="flex items-center gap-2 text-xs font-semibold text-[#1d1d1f] uppercase tracking-wider">
             <Music className="w-3.5 h-3.5 text-[#0071e3]" />
             <span>Entertainment & Audio</span>
@@ -85,14 +85,14 @@ export function ConceptCard({ concept, currency, isSelected, onSelect }: Concept
         </div>
 
         {/* Strategic justification */}
-        <div className="bg-[#fbfbfd] p-3 rounded-xl border border-[#e5e5ea] text-xs space-y-2 mb-6">
+        <div className="bg-[#fbfbfd] p-3.5 rounded-xl border border-[#e5e5ea] text-xs space-y-2 mb-6">
           <div>
             <span className="font-semibold text-[#1d1d1f]">Why It Works: </span>
-            <span className="text-[#555555]">{concept.whyThisWorks}</span>
+            <span className="text-[#555555] leading-relaxed">{concept.whyThisWorks}</span>
           </div>
-          <div className="flex items-start gap-1.5 pt-1 border-t border-[#e5e5ea]">
+          <div className="flex items-start gap-1.5 pt-2 border-t border-[#e5e5ea]">
             <AlertTriangle className="w-3.5 h-3.5 text-[#b06000] shrink-0 mt-0.5" />
-            <span className="text-[#555555]">
+            <span className="text-[#555555] leading-relaxed">
               <strong className="text-[#1d1d1f]">Trade-off: </strong>
               {concept.tradeOffs}
             </span>

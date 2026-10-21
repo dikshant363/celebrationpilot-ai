@@ -54,12 +54,12 @@ export default function WorkspacePage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-[#e5e5ea] pb-6 mb-8">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#137333]" />
+            <span className="w-2 h-2 rounded-full bg-[#34c759] shadow-xs" />
             <span className="text-xs font-semibold uppercase tracking-wider text-[#0071e3]">
               Active Celebration Workspace
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f]">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1d1d1f]">
             {brief.eventTitle}
           </h1>
           <p className="text-xs text-[#555555] mt-1">
@@ -69,7 +69,7 @@ export default function WorkspacePage() {
 
         {/* Concept Switcher & Export CTA */}
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 bg-white border border-[#d2d2d7] rounded-xl px-3 py-1.5 text-xs">
+          <div className="flex items-center gap-2 bg-white border border-[#e5e5ea] rounded-xl px-3.5 py-1.5 text-xs shadow-2xs">
             <Layers className="w-4 h-4 text-[#0071e3]" />
             <label htmlFor="concept-plan-select" className="text-[#555555] font-medium">
               Plan:
@@ -98,11 +98,11 @@ export default function WorkspacePage() {
         </div>
       </div>
 
-      {/* Tabs Navigation */}
+      {/* Tabs Navigation (Apple Segmented Bar) */}
       <div
         role="tablist"
         aria-label="Workspace Sections"
-        className="flex items-center gap-2 border-b border-[#e5e5ea] mb-8 overflow-x-auto pb-1"
+        className="flex items-center gap-1.5 bg-black/[0.04] p-1 rounded-2xl mb-8 overflow-x-auto"
       >
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -115,10 +115,10 @@ export default function WorkspacePage() {
               aria-selected={isActive}
               aria-controls={`workspace-panel-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-all cursor-pointer whitespace-nowrap select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] ${
+              className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl transition-all duration-200 cursor-pointer whitespace-nowrap select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0071e3] ${
                 isActive
-                  ? 'border-[#0071e3] text-[#0071e3]'
-                  : 'border-transparent text-[#555555] hover:text-[#1d1d1f] hover:border-[#d2d2d7]'
+                  ? 'bg-white text-[#1d1d1f] shadow-xs'
+                  : 'text-[#555555] hover:text-[#1d1d1f] hover:bg-white/40'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -133,7 +133,7 @@ export default function WorkspacePage() {
         role="tabpanel"
         id={`workspace-panel-${activeTab}`}
         aria-labelledby={`workspace-tab-${activeTab}`}
-        className="animate-in fade-in duration-150"
+        className="animate-in fade-in duration-200"
       >
         {activeTab === 'schedule' && <ScheduleTimeline schedule={currentPlan.schedule} />}
 

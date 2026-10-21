@@ -39,43 +39,43 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
     filterRsvp === 'All' ? guests : guests.filter((g) => g.rsvpStatus === filterRsvp);
 
   return (
-    <Card className="space-y-6">
+    <Card className="space-y-6 p-6 sm:p-8 bg-white border border-[#e5e5ea] rounded-2xl shadow-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e5e5ea] pb-5">
         <div>
-          <h3 className="text-lg font-bold text-[#1d1d1f]">Guest List & RSVP Tracking</h3>
-          <p className="text-xs text-[#555555]">
+          <h3 className="text-xl font-bold tracking-tight text-[#1d1d1f]">Guest List & RSVP Tracking</h3>
+          <p className="text-xs text-[#555555] mt-0.5">
             Manage attendance verification, dietary requirements, and plus-one seating
           </p>
         </div>
         <Button size="sm" variant="outline" onClick={() => setIsAdding(!isAdding)}>
-          <UserPlus className="w-3.5 h-3.5" />
+          <UserPlus className="w-3.5 h-3.5 mr-1" />
           Add Guest
         </Button>
       </div>
 
       {/* Guest Summary Counters */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3 bg-[#f5f5f7] rounded-xl text-center">
-          <div className="text-[11px] font-semibold text-[#555555] uppercase">Invited Total</div>
-          <div className="text-lg font-bold text-[#1d1d1f] mt-0.5">{guests.length}</div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <div className="p-4 bg-[#f5f5f7] rounded-2xl text-center border border-[#e5e5ea]">
+          <div className="text-[11px] font-semibold text-[#555555] uppercase tracking-wider">Invited Total</div>
+          <div className="text-2xl font-bold tracking-tight text-[#1d1d1f] mt-1">{guests.length}</div>
         </div>
-        <div className="p-3 bg-[#eaf8ee] rounded-xl text-center border border-[#b5ecc1]">
-          <div className="text-[11px] font-semibold text-[#137333] uppercase">Confirmed</div>
-          <div className="text-lg font-bold text-[#137333] mt-0.5">{confirmed}</div>
+        <div className="p-4 bg-[#eaf8ee] rounded-2xl text-center border border-[#b5ecc1]">
+          <div className="text-[11px] font-semibold text-[#137333] uppercase tracking-wider">Confirmed</div>
+          <div className="text-2xl font-bold tracking-tight text-[#137333] mt-1">{confirmed}</div>
         </div>
-        <div className="p-3 bg-[#fef7e6] rounded-xl text-center border border-[#fce3a6]">
-          <div className="text-[11px] font-semibold text-[#b06000] uppercase">Pending</div>
-          <div className="text-lg font-bold text-[#b06000] mt-0.5">{pending}</div>
+        <div className="p-4 bg-[#fef7e6] rounded-2xl text-center border border-[#fce3a6]">
+          <div className="text-[11px] font-semibold text-[#b06000] uppercase tracking-wider">Pending</div>
+          <div className="text-2xl font-bold tracking-tight text-[#b06000] mt-1">{pending}</div>
         </div>
-        <div className="p-3 bg-[#fdf0ef] rounded-xl text-center border border-[#f9c0bb]">
-          <div className="text-[11px] font-semibold text-[#d93025] uppercase">Declined</div>
-          <div className="text-lg font-bold text-[#d93025] mt-0.5">{declined}</div>
+        <div className="p-4 bg-[#fdf0ef] rounded-2xl text-center border border-[#f9c0bb]">
+          <div className="text-[11px] font-semibold text-[#d93025] uppercase tracking-wider">Declined</div>
+          <div className="text-2xl font-bold tracking-tight text-[#d93025] mt-1">{declined}</div>
         </div>
       </div>
 
       {/* Add Guest Form */}
       {isAdding && (
-        <form onSubmit={handleCreateGuest} className="bg-[#f5f5f7] p-4 rounded-2xl border border-[#e5e5ea] space-y-3">
+        <form onSubmit={handleCreateGuest} className="bg-[#fbfbfd] p-4 sm:p-5 rounded-2xl border border-[#e5e5ea] space-y-3.5 shadow-2xs">
           <div className="text-xs font-semibold text-[#1d1d1f]">Add New Attendee</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             <input
@@ -83,13 +83,13 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
               placeholder="Guest Full Name..."
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all"
               required
             />
             <select
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value as GuestCategory)}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl font-medium text-[#1d1d1f]"
             >
               <option value="Family">Family</option>
               <option value="Friends">Friends</option>
@@ -102,14 +102,14 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
               placeholder="Dietary requirements..."
               value={newDietary}
               onChange={(e) => setNewDietary(e.target.value)}
-              className="px-3 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+              className="px-3.5 py-2 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all"
             />
             <label className="flex items-center gap-2 text-xs text-[#1d1d1f] cursor-pointer">
               <input
                 type="checkbox"
                 checked={newPlusOne}
                 onChange={(e) => setNewPlusOne(e.target.checked)}
-                className="w-4 h-4 rounded text-[#0071e3]"
+                className="w-4 h-4 rounded text-[#0071e3] focus:ring-[#0071e3]"
               />
               Plus One Allowed
             </label>
@@ -133,9 +133,9 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
             type="button"
             onClick={() => setFilterRsvp(r)}
             aria-pressed={filterRsvp === r}
-            className={`px-3 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors ${
+            className={`px-3.5 py-1 rounded-full text-xs font-medium cursor-pointer transition-colors ${
               filterRsvp === r
-                ? 'bg-[#1d1d1f] text-white'
+                ? 'bg-[#1d1d1f] text-white shadow-2xs'
                 : 'bg-[#f5f5f7] text-[#555555] hover:bg-[#e8e8ed]'
             }`}
           >
@@ -158,7 +158,7 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
           </thead>
           <tbody className="divide-y divide-[#e5e5ea]">
             {filteredGuests.map((guest) => (
-              <tr key={guest.id} className="hover:bg-[#fbfbfd]">
+              <tr key={guest.id} className="hover:bg-[#fbfbfd] transition-colors">
                 <td className="py-3 px-3 font-semibold text-[#1d1d1f]">{guest.name}</td>
                 <td className="py-3 px-3 text-[#555555]">
                   <Badge variant="gray">{guest.category}</Badge>
@@ -182,13 +182,13 @@ export function GuestManager({ guests }: { guests: GuestItem[] }) {
                           onClick={() => updateGuestRSVP(guest.id, status)}
                           aria-label={`Set RSVP for ${guest.name} to ${status}`}
                           aria-pressed={isActive}
-                          className={`px-2 py-0.5 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
+                          className={`px-2.5 py-0.5 rounded-md text-[11px] font-semibold transition-all cursor-pointer ${
                             isActive
                               ? status === 'Confirmed'
-                                ? 'bg-[#137333] text-white'
+                                ? 'bg-[#137333] text-white shadow-2xs'
                                 : status === 'Pending'
-                                ? 'bg-[#b06000] text-white'
-                                : 'bg-[#d93025] text-white'
+                                ? 'bg-[#b06000] text-white shadow-2xs'
+                                : 'bg-[#d93025] text-white shadow-2xs'
                               : 'text-[#555555] hover:text-[#1d1d1f]'
                           }`}
                         >

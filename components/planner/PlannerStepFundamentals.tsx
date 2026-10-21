@@ -29,15 +29,15 @@ export const PlannerStepFundamentals: React.FC<PlannerStepFundamentalsProps> = (
   errors,
 }) => {
   return (
-    <Card className="space-y-6">
-      <div>
-        <h2 className="text-lg font-bold text-[#1d1d1f]">Step 1: Event Fundamentals</h2>
-        <p className="text-xs text-[#555555]">Select the celebration type and basic parameters</p>
+    <Card className="space-y-6 p-6 sm:p-8 bg-white border border-[#e5e5ea] rounded-2xl shadow-xs">
+      <div className="border-b border-[#e5e5ea] pb-4">
+        <h2 className="text-xl font-bold tracking-tight text-[#1d1d1f]">Step 1: Event Fundamentals</h2>
+        <p className="text-xs text-[#555555] mt-1">Select your celebration milestone and core parameters</p>
       </div>
 
       {/* Event Type */}
-      <div className="space-y-2">
-        <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
+      <div className="space-y-2.5">
+        <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wider uppercase">
           Celebration Type
         </label>
         <div className="flex flex-wrap gap-2">

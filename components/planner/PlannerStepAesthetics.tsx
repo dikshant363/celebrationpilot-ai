@@ -68,10 +68,10 @@ export const PlannerStepAesthetics: React.FC<PlannerStepAestheticsProps> = ({
   };
 
   return (
-    <Card className="space-y-6">
-      <div>
-        <h2 className="text-lg font-bold text-[#1d1d1f]">Step 3: Aesthetic, Dietary & Priorities</h2>
-        <p className="text-xs text-[#555555]">
+    <Card className="space-y-6 p-6 sm:p-8 bg-white border border-[#e5e5ea] rounded-2xl shadow-xs">
+      <div className="border-b border-[#e5e5ea] pb-4">
+        <h2 className="text-xl font-bold tracking-tight text-[#1d1d1f]">Step 3: Aesthetic, Dietary & Priorities</h2>
+        <p className="text-xs text-[#555555] mt-1">
           Fine-tune culinary curation, sensory ambience, and special guest accommodations
         </p>
       </div>
@@ -83,12 +83,12 @@ export const PlannerStepAesthetics: React.FC<PlannerStepAestheticsProps> = ({
         value={themePreference}
         onChange={(e) => setThemePreference(e.target.value)}
         error={errors.themePreference}
-        helper="The artistic direction for floral, table styling, and lighting"
+        helper="The artistic direction for florals, table styling, and ambient lighting"
       />
 
       {/* Dietary Needs */}
-      <div className="space-y-2">
-        <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
+      <div className="space-y-2.5">
+        <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wider uppercase">
           Dietary Accommodations
         </label>
         <div className="flex flex-wrap gap-2">
@@ -107,8 +107,8 @@ export const PlannerStepAesthetics: React.FC<PlannerStepAestheticsProps> = ({
       </div>
 
       {/* Accessibility Requirements */}
-      <div className="space-y-2">
-        <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
+      <div className="space-y-2.5">
+        <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wider uppercase">
           Accessibility & Inclusivity
         </label>
         <div className="flex flex-wrap gap-2">
@@ -131,8 +131,8 @@ export const PlannerStepAesthetics: React.FC<PlannerStepAestheticsProps> = ({
       </div>
 
       {/* Priorities & Vibe */}
-      <div className="space-y-2">
-        <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
+      <div className="space-y-2.5">
+        <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wider uppercase">
           Key Entertainment & Vibe Priorities
         </label>
         <div className="flex flex-wrap gap-2">
@@ -150,22 +150,25 @@ export const PlannerStepAesthetics: React.FC<PlannerStepAestheticsProps> = ({
         </div>
       </div>
 
-      {/* Special Requests */}
+      {/* Special Requests / Notes */}
       <div className="space-y-1.5">
         <label
-          htmlFor="special-requests-input"
-          className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase"
+          htmlFor="special-requests"
+          className="block text-xs font-semibold text-[#1d1d1f] tracking-wider uppercase"
         >
-          Special Requests & Notes (Optional)
+          Special Requests / Personal Notes (Optional)
         </label>
         <textarea
-          id="special-requests-input"
+          id="special-requests"
           rows={3}
-          placeholder="Any special family traditions, surprise performances, or strict curfew requirements..."
+          placeholder="Surprise entrance cues, specific tribute songs, cultural blessings, or VIP arrival requirements..."
           value={specialRequests}
           onChange={(e) => setSpecialRequests(e.target.value)}
-          className="w-full px-4 py-2.5 text-sm bg-white border border-[#d2d2d7] rounded-xl text-[#1d1d1f] focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
+          className="w-full px-3.5 py-2.5 text-xs bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3] transition-all text-[#1d1d1f] placeholder:text-[#86868b]"
         />
+        <p className="text-[11px] text-[#555555]">
+          Included in your master schedule and printable event dossier
+        </p>
       </div>
     </Card>
   );
