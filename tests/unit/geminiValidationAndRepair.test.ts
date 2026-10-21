@@ -19,10 +19,10 @@ describe('Unit: AI Gateway Schema Validation & Repair Engine', () => {
   };
 
   test('returns null for empty, non-object, or truncated concepts arrays', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(validateAndRepairPlanSuite(null as any, mockBrief)).toBeNull();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(validateAndRepairPlanSuite({} as any, mockBrief)).toBeNull();
+    expect(validateAndRepairPlanSuite(null, mockBrief)).toBeNull();
+    expect(validateAndRepairPlanSuite({}, mockBrief)).toBeNull();
+    expect(validateAndRepairPlanSuite('not-an-object', mockBrief)).toBeNull();
+    expect(validateAndRepairPlanSuite([1, 2, 3], mockBrief)).toBeNull();
     expect(
       validateAndRepairPlanSuite(
         { concepts: [{ id: 'concept-1' }] },

@@ -13,7 +13,7 @@ const CANDIDATE_MODELS = [
   'gemini-2.0-flash',
   'gemini-1.5-flash',
   'gemini-2.5-pro',
-  'gemini-3.8-flash',
+  'gemini-1.5-pro',
 ];
 const REQUEST_TIMEOUT_MS = 25000;
 
@@ -135,12 +135,13 @@ async function executeModelInference(
 }
 
 export function validateAndRepairPlanSuite(
-  parsed: Record<string, unknown>,
+  parsed: unknown,
   brief: EventBrief
 ): GeneratedPlanSuite | null {
-  if (!parsed || typeof parsed !== 'object') return null;
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null;
 
-  const rawConcepts = parsed.concepts;
+  const rawObj = parsed as Record<string, unknown>;
+  const rawConcepts = rawObj.concepts;
   if (!Array.isArray(rawConcepts) || rawConcepts.length < 3) return null;
 
   const fallbackSuite = generateMockPlanSuite(brief);
@@ -198,7 +199,7 @@ export function validateAndRepairPlanSuite(
     repairedConcepts.push(repairedConcept);
 
     // Detailed plan validation
-    const rawPlans = (parsed.detailedPlans as Record<string, Partial<DetailedEventPlan>>) || {};
+    const rawPlans = (rawObj.detailedPlans as Record<string, Partial<DetailedEventPlan>>) || {};
     const planCandidate = rawPlans[conceptId] || rawPlans[c.id || ''] || fallbackSuite.detailedPlans[fallbackConcept.id];
 
     repairedPlans[conceptId] = {
@@ -264,8 +265,8 @@ export function validateAndRepairPlanSuite(
   }
 
   const selectedConceptId =
-    typeof parsed.selectedConceptId === 'string' && repairedPlans[parsed.selectedConceptId]
-      ? parsed.selectedConceptId
+    typeof rawObj.selectedConceptId === 'string' && repairedPlans[rawObj.selectedConceptId]
+      ? rawObj.selectedConceptId
       : repairedConcepts[0].id;
 
   return {

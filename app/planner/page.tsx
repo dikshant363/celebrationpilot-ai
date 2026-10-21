@@ -2,15 +2,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Sparkles,
-  ArrowRight,
-  ArrowLeft,
-} from 'lucide-react';
+import { Sparkles, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { Chip } from '@/components/ui/Chip';
-import { Input } from '@/components/ui/Input';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { useEvent } from '@/lib/context/EventContext';
 import {
@@ -19,41 +12,12 @@ import {
   Currency,
   VenueType,
 } from '@/lib/types/event';
-import {
-  VALID_EVENT_TYPES,
-  VALID_CURRENCIES,
-  VALID_VENUE_TYPES,
-  validateEventBrief,
-} from '@/lib/validation/eventBriefSchema';
+import { validateEventBrief } from '@/lib/validation/eventBriefSchema';
+import { PlannerStepFundamentals } from '@/components/planner/PlannerStepFundamentals';
+import { PlannerStepConstraints } from '@/components/planner/PlannerStepConstraints';
+import { PlannerStepAesthetics } from '@/components/planner/PlannerStepAesthetics';
 
-const DIETARY_OPTIONS = [
-  'Vegetarian',
-  'Vegan',
-  'Halal',
-  'Kosher',
-  'Gluten-Free',
-  'Nut Allergies',
-  'Dairy-Free',
-];
-
-const ACCESSIBILITY_OPTIONS = [
-  'Wheelchair Ramp Access',
-  'Ground Floor Seating',
-  'Quiet / Low-Sensory Zone',
-  'Assisted Listening Device',
-  'Service Animal Friendly',
-];
-
-const VIBE_OPTIONS = [
-  'High-Energy Live Band',
-  'Intimate Acoustic Vibes',
-  'Interactive Chef Stations',
-  'Plated Fine Dining',
-  'Social 360 Video Booth',
-  'Eco-Friendly Zero-Waste',
-  'Starlight Garden Ambience',
-  'Late-Night Dance Party',
-];
+const STEP_LABELS = ['Event Fundamentals', 'Venue & Constraints', 'Aesthetic & Hospitality'];
 
 export default function PlannerPage() {
   const router = useRouter();
@@ -86,14 +50,6 @@ export default function PlannerPage() {
     brief?.vibeAndPriorities || ['Intimate Acoustic Vibes', 'Interactive Chef Stations']
   );
   const [specialRequests, setSpecialRequests] = useState(brief?.specialRequests || '');
-
-  const toggleArrayItem = (list: string[], item: string, setter: (val: string[]) => void) => {
-    if (list.includes(item)) {
-      setter(list.filter((x) => x !== item));
-    } else {
-      setter([...list, item]);
-    }
-  };
 
   const validateCurrentStep = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -168,8 +124,6 @@ export default function PlannerPage() {
     }
   };
 
-  const stepLabels = ['Event Fundamentals', 'Venue & Constraints', 'Aesthetic & Hospitality'];
-
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       {/* Header */}
@@ -184,244 +138,52 @@ export default function PlannerPage() {
 
       {/* Progress Bar */}
       <div className="bg-white border border-[#d2d2d7] rounded-2xl p-5 mb-8 shadow-xs">
-        <ProgressIndicator currentStep={step} totalSteps={3} stepLabels={stepLabels} />
+        <ProgressIndicator currentStep={step} totalSteps={3} stepLabels={STEP_LABELS} />
       </div>
 
       <form onSubmit={handleSubmit}>
-        {/* STEP 1: EVENT FUNDAMENTALS */}
         {step === 1 && (
-          <Card className="space-y-6">
-            <div>
-              <h2 className="text-lg font-bold text-[#1d1d1f]">Step 1: Event Fundamentals</h2>
-              <p className="text-xs text-[#555555]">Select the celebration type and basic parameters</p>
-            </div>
-
-            {/* Event Type */}
-            <div className="space-y-2">
-              <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
-                Celebration Type
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {VALID_EVENT_TYPES.map((type) => (
-                  <Chip
-                    key={type}
-                    selected={eventType === type}
-                    onClick={() => setEventType(type)}
-                  >
-                    {type}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-
-            {/* Event Title */}
-            <Input
-              label="Event Title / Celebration Name"
-              placeholder="e.g. Maya & Leo's Vineyard Wedding, 30th Rooftop Soirée"
-              value={eventTitle}
-              onChange={(e) => setEventTitle(e.target.value)}
-              error={errors.eventTitle}
-              helper="A memorable working title for your celebration dossier"
-            />
-
-            {/* Date and City */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input
-                label="Target Date"
-                type="date"
-                value={targetDate}
-                onChange={(e) => setTargetDate(e.target.value)}
-                error={errors.targetDate}
-              />
-              <Input
-                label="City / Destination"
-                placeholder="e.g. San Francisco, CA or Paris, France"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                error={errors.city}
-              />
-            </div>
-          </Card>
+          <PlannerStepFundamentals
+            eventType={eventType}
+            setEventType={setEventType}
+            eventTitle={eventTitle}
+            setEventTitle={setEventTitle}
+            targetDate={targetDate}
+            setTargetDate={setTargetDate}
+            city={city}
+            setCity={setCity}
+            errors={errors}
+          />
         )}
 
-        {/* STEP 2: VENUE & CONSTRAINTS */}
         {step === 2 && (
-          <Card className="space-y-6">
-            <div>
-              <h2 className="text-lg font-bold text-[#1d1d1f]">Step 2: Venue & Hard Constraints</h2>
-              <p className="text-xs text-[#555555]">
-                Establish realistic boundaries for venue selection, headcount, and financial envelope
-              </p>
-            </div>
-
-            {/* Venue Preference */}
-            <div className="space-y-2">
-              <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
-                Preferred Venue Style
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {VALID_VENUE_TYPES.map((v) => (
-                  <Chip key={v} selected={venueType === v} onClick={() => setVenueType(v)}>
-                    {v}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-
-            {/* Guest Count */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <Input
-                label="Expected Guest Count"
-                type="number"
-                min={2}
-                max={25000}
-                value={guestCount}
-                onChange={(e) => setGuestCount(Number(e.target.value))}
-                error={errors.guestCount}
-                helper="Adults and verified attendees"
-              />
-
-              <div className="sm:col-span-2 grid grid-cols-3 gap-2">
-                <div className="col-span-2">
-                  <Input
-                    label="Total Budget"
-                    type="number"
-                    min={100}
-                    value={budgetTotal}
-                    onChange={(e) => setBudgetTotal(Number(e.target.value))}
-                    error={errors.budgetTotal}
-                    helper="Overall financial allocation"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="currency-select" className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase mb-1.5">
-                    Currency
-                  </label>
-                  <select
-                    id="currency-select"
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value as Currency)}
-                    className="w-full px-3 py-2.5 text-sm bg-white border border-[#d2d2d7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
-                  >
-                    {VALID_CURRENCIES.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Estimated Per Guest Banner */}
-            <div className="p-3.5 bg-[#f5f5f7] rounded-xl text-xs text-[#555555] flex items-center justify-between">
-              <span>Estimated Per-Guest Allocation Envelope:</span>
-              <span className="font-bold text-[#1d1d1f]">
-                {currency} {guestCount > 0 ? Math.round(budgetTotal / guestCount).toLocaleString() : 0} / person
-              </span>
-            </div>
-          </Card>
+          <PlannerStepConstraints
+            venueType={venueType}
+            setVenueType={setVenueType}
+            guestCount={guestCount}
+            setGuestCount={setGuestCount}
+            budgetTotal={budgetTotal}
+            setBudgetTotal={setBudgetTotal}
+            currency={currency}
+            setCurrency={setCurrency}
+            errors={errors}
+          />
         )}
 
-        {/* STEP 3: AESTHETIC & HOSPITALITY */}
         {step === 3 && (
-          <Card className="space-y-6">
-            <div>
-              <h2 className="text-lg font-bold text-[#1d1d1f]">Step 3: Aesthetic, Dietary & Priorities</h2>
-              <p className="text-xs text-[#555555]">
-                Fine-tune culinary curation, sensory ambience, and special guest accommodations
-              </p>
-            </div>
-
-            {/* Theme / Aesthetic */}
-            <Input
-              label="Theme & Styling Aesthetic"
-              placeholder="e.g. Modern Minimalist, Bohemian Rustic, Cyberpunk Neon, Regal Royalty"
-              value={themePreference}
-              onChange={(e) => setThemePreference(e.target.value)}
-              error={errors.themePreference}
-              helper="The artistic direction for floral, table styling, and lighting"
-            />
-
-            {/* Dietary Needs */}
-            <div className="space-y-2">
-              <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
-                Dietary Accommodations
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {DIETARY_OPTIONS.map((item) => (
-                  <Chip
-                    key={item}
-                    selected={dietaryRestrictions.includes(item)}
-                    onClick={() =>
-                      toggleArrayItem(dietaryRestrictions, item, setDietaryRestrictions)
-                    }
-                  >
-                    {item}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-
-            {/* Accessibility Requirements */}
-            <div className="space-y-2">
-              <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
-                Accessibility & Inclusivity
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {ACCESSIBILITY_OPTIONS.map((item) => (
-                  <Chip
-                    key={item}
-                    selected={accessibilityRequirements.includes(item)}
-                    onClick={() =>
-                      toggleArrayItem(
-                        accessibilityRequirements,
-                        item,
-                        setAccessibilityRequirements
-                      )
-                    }
-                  >
-                    {item}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-
-            {/* Priorities & Vibe */}
-            <div className="space-y-2">
-              <label className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
-                Key Entertainment & Vibe Priorities
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {VIBE_OPTIONS.map((item) => (
-                  <Chip
-                    key={item}
-                    selected={vibeAndPriorities.includes(item)}
-                    onClick={() =>
-                      toggleArrayItem(vibeAndPriorities, item, setVibeAndPriorities)
-                    }
-                  >
-                    {item}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-
-            {/* Special Requests */}
-            <div className="space-y-1.5">
-              <label htmlFor="special-requests-input" className="block text-xs font-semibold text-[#1d1d1f] tracking-wide uppercase">
-                Special Requests & Notes (Optional)
-              </label>
-              <textarea
-                id="special-requests-input"
-                rows={3}
-                placeholder="Any special family traditions, surprise performances, or strict curfew requirements..."
-                value={specialRequests}
-                onChange={(e) => setSpecialRequests(e.target.value)}
-                className="w-full px-4 py-2.5 text-sm bg-white border border-[#d2d2d7] rounded-xl text-[#1d1d1f] focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
-              />
-            </div>
-          </Card>
+          <PlannerStepAesthetics
+            themePreference={themePreference}
+            setThemePreference={setThemePreference}
+            dietaryRestrictions={dietaryRestrictions}
+            setDietaryRestrictions={setDietaryRestrictions}
+            accessibilityRequirements={accessibilityRequirements}
+            setAccessibilityRequirements={setAccessibilityRequirements}
+            vibeAndPriorities={vibeAndPriorities}
+            setVibeAndPriorities={setVibeAndPriorities}
+            specialRequests={specialRequests}
+            setSpecialRequests={setSpecialRequests}
+            errors={errors}
+          />
         )}
 
         {/* Navigation Buttons */}

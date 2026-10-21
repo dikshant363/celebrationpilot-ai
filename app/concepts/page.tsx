@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import confetti from 'canvas-confetti';
 import { useEvent } from '@/lib/context/EventContext';
 import { ConceptCard } from '@/components/concepts/ConceptCard';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -11,6 +12,26 @@ import { Button } from '@/components/ui/Button';
 export default function ConceptsPage() {
   const router = useRouter();
   const { brief, planSuite, selectedConceptId, selectConcept } = useEvent();
+
+  useEffect(() => {
+    if (planSuite && planSuite.concepts.length > 0) {
+      try {
+        const prefersReducedMotion =
+          typeof window !== 'undefined' &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!prefersReducedMotion) {
+          confetti({
+            particleCount: 40,
+            spread: 60,
+            origin: { y: 0.6 },
+            disableForReducedMotion: true,
+          });
+        }
+      } catch {
+        // Safe degrade if canvas is unsupported
+      }
+    }
+  }, [planSuite]);
 
   if (!planSuite || !brief || planSuite.concepts.length === 0) {
     return (

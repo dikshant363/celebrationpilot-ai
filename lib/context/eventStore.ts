@@ -1,6 +1,7 @@
 import {
   EventBrief,
   GeneratedPlanSuite,
+  DetailedEventPlan,
   TaskItem,
   GuestItem,
   BudgetItem,
@@ -27,6 +28,26 @@ const serverState: EventStoreState = {
 
 let currentState: EventStoreState = { ...serverState };
 const listeners = new Set<() => void>();
+
+function mutateCurrentPlan(
+  state: EventStoreState,
+  mutator: (currentPlan: DetailedEventPlan) => DetailedEventPlan
+): EventStoreState {
+  if (!state.planSuite) return state;
+  const currentPlan = state.planSuite.detailedPlans[state.selectedConceptId];
+  if (!currentPlan) return state;
+
+  return {
+    ...state,
+    planSuite: {
+      ...state.planSuite,
+      detailedPlans: {
+        ...state.planSuite.detailedPlans,
+        [state.selectedConceptId]: mutator(currentPlan),
+      },
+    },
+  };
+}
 
 export const eventStore = {
   getSnapshot(): EventStoreState {
@@ -151,240 +172,109 @@ export const eventStore = {
   },
 
   updateTaskStatus(taskId: string, status: TaskItem['status']) {
-    eventStore.setState((prev) => {
-      if (!prev.planSuite) return prev;
-      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
-      if (!currentPlan) return prev;
-
-      const updatedTasks = currentPlan.tasks.map((task) =>
-        task.id === taskId ? { ...task, status } : task
-      );
-
-      return {
-        ...prev,
-        planSuite: {
-          ...prev.planSuite,
-          detailedPlans: {
-            ...prev.planSuite.detailedPlans,
-            [prev.selectedConceptId]: {
-              ...currentPlan,
-              tasks: updatedTasks,
-            },
-          },
-        },
-      };
-    });
+    eventStore.setState((prev) =>
+      mutateCurrentPlan(prev, (plan) => ({
+        ...plan,
+        tasks: plan.tasks.map((task) =>
+          task.id === taskId ? { ...task, status } : task
+        ),
+      }))
+    );
   },
 
   addTask(task: Omit<TaskItem, 'id'>) {
     eventStore.setState((prev) => {
-      if (!prev.planSuite) return prev;
-      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
-      if (!currentPlan) return prev;
-
       const newTask: TaskItem = {
         ...task,
         id: `custom-t-${Date.now()}`,
       };
-
-      return {
-        ...prev,
-        planSuite: {
-          ...prev.planSuite,
-          detailedPlans: {
-            ...prev.planSuite.detailedPlans,
-            [prev.selectedConceptId]: {
-              ...currentPlan,
-              tasks: [newTask, ...currentPlan.tasks],
-            },
-          },
-        },
-      };
+      return mutateCurrentPlan(prev, (plan) => ({
+        ...plan,
+        tasks: [newTask, ...plan.tasks],
+      }));
     });
   },
 
   updateGuestRSVP(guestId: string, rsvpStatus: RSVPStatus) {
-    eventStore.setState((prev) => {
-      if (!prev.planSuite) return prev;
-      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
-      if (!currentPlan) return prev;
-
-      const updatedGuests = currentPlan.guestList.map((guest) =>
-        guest.id === guestId ? { ...guest, rsvpStatus } : guest
-      );
-
-      return {
-        ...prev,
-        planSuite: {
-          ...prev.planSuite,
-          detailedPlans: {
-            ...prev.planSuite.detailedPlans,
-            [prev.selectedConceptId]: {
-              ...currentPlan,
-              guestList: updatedGuests,
-            },
-          },
-        },
-      };
-    });
+    eventStore.setState((prev) =>
+      mutateCurrentPlan(prev, (plan) => ({
+        ...plan,
+        guestList: plan.guestList.map((guest) =>
+          guest.id === guestId ? { ...guest, rsvpStatus } : guest
+        ),
+      }))
+    );
   },
 
   addGuest(guest: Omit<GuestItem, 'id'>) {
     eventStore.setState((prev) => {
-      if (!prev.planSuite) return prev;
-      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
-      if (!currentPlan) return prev;
-
       const newGuest: GuestItem = {
         ...guest,
         id: `custom-g-${Date.now()}`,
       };
-
-      return {
-        ...prev,
-        planSuite: {
-          ...prev.planSuite,
-          detailedPlans: {
-            ...prev.planSuite.detailedPlans,
-            [prev.selectedConceptId]: {
-              ...currentPlan,
-              guestList: [newGuest, ...currentPlan.guestList],
-            },
-          },
-        },
-      };
+      return mutateCurrentPlan(prev, (plan) => ({
+        ...plan,
+        guestList: [newGuest, ...plan.guestList],
+      }));
     });
   },
 
   updateBudgetItem(itemId: string, updates: Partial<BudgetItem>) {
-    eventStore.setState((prev) => {
-      if (!prev.planSuite) return prev;
-      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
-      if (!currentPlan) return prev;
-
-      const updatedBreakdown = currentPlan.budgetBreakdown.map((item) =>
-        item.id === itemId ? { ...item, ...updates } : item
-      );
-
-      return {
-        ...prev,
-        planSuite: {
-          ...prev.planSuite,
-          detailedPlans: {
-            ...prev.planSuite.detailedPlans,
-            [prev.selectedConceptId]: {
-              ...currentPlan,
-              budgetBreakdown: updatedBreakdown,
-            },
-          },
-        },
-      };
-    });
+    eventStore.setState((prev) =>
+      mutateCurrentPlan(prev, (plan) => ({
+        ...plan,
+        budgetBreakdown: plan.budgetBreakdown.map((item) =>
+          item.id === itemId ? { ...item, ...updates } : item
+        ),
+      }))
+    );
   },
 
   addBudgetItem(item: Omit<BudgetItem, 'id'>) {
     eventStore.setState((prev) => {
-      if (!prev.planSuite) return prev;
-      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
-      if (!currentPlan) return prev;
-
       const newItem: BudgetItem = {
         ...item,
         id: `custom-b-${Date.now()}`,
       };
-
-      return {
-        ...prev,
-        planSuite: {
-          ...prev.planSuite,
-          detailedPlans: {
-            ...prev.planSuite.detailedPlans,
-            [prev.selectedConceptId]: {
-              ...currentPlan,
-              budgetBreakdown: [...currentPlan.budgetBreakdown, newItem],
-            },
-          },
-        },
-      };
+      return mutateCurrentPlan(prev, (plan) => ({
+        ...plan,
+        budgetBreakdown: [...plan.budgetBreakdown, newItem],
+      }));
     });
   },
 
   addScheduleItem(item: ScheduleItem) {
-    eventStore.setState((prev) => {
-      if (!prev.planSuite) return prev;
-      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
-      if (!currentPlan) return prev;
-
-      const updatedSchedule = [...currentPlan.schedule, item].sort((a, b) =>
-        a.time.localeCompare(b.time)
-      );
-
-      return {
-        ...prev,
-        planSuite: {
-          ...prev.planSuite,
-          detailedPlans: {
-            ...prev.planSuite.detailedPlans,
-            [prev.selectedConceptId]: {
-              ...currentPlan,
-              schedule: updatedSchedule,
-            },
-          },
-        },
-      };
-    });
+    eventStore.setState((prev) =>
+      mutateCurrentPlan(prev, (plan) => ({
+        ...plan,
+        schedule: [...plan.schedule, item].sort((a, b) =>
+          a.time.localeCompare(b.time)
+        ),
+      }))
+    );
   },
 
   updateVendor(vendorId: string, updates: Partial<VendorItem>) {
-    eventStore.setState((prev) => {
-      if (!prev.planSuite) return prev;
-      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
-      if (!currentPlan) return prev;
-
-      const updatedVendors = currentPlan.vendorDirectory.map((vendor) =>
-        vendor.id === vendorId ? { ...vendor, ...updates } : vendor
-      );
-
-      return {
-        ...prev,
-        planSuite: {
-          ...prev.planSuite,
-          detailedPlans: {
-            ...prev.planSuite.detailedPlans,
-            [prev.selectedConceptId]: {
-              ...currentPlan,
-              vendorDirectory: updatedVendors,
-            },
-          },
-        },
-      };
-    });
+    eventStore.setState((prev) =>
+      mutateCurrentPlan(prev, (plan) => ({
+        ...plan,
+        vendorDirectory: plan.vendorDirectory.map((vendor) =>
+          vendor.id === vendorId ? { ...vendor, ...updates } : vendor
+        ),
+      }))
+    );
   },
 
   addVendor(vendor: Omit<VendorItem, 'id'>) {
     eventStore.setState((prev) => {
-      if (!prev.planSuite) return prev;
-      const currentPlan = prev.planSuite.detailedPlans[prev.selectedConceptId];
-      if (!currentPlan) return prev;
-
       const newVendor: VendorItem = {
         ...vendor,
         id: `custom-v-${Date.now()}`,
       };
-
-      return {
-        ...prev,
-        planSuite: {
-          ...prev.planSuite,
-          detailedPlans: {
-            ...prev.planSuite.detailedPlans,
-            [prev.selectedConceptId]: {
-              ...currentPlan,
-              vendorDirectory: [...currentPlan.vendorDirectory, newVendor],
-            },
-          },
-        },
-      };
+      return mutateCurrentPlan(prev, (plan) => ({
+        ...plan,
+        vendorDirectory: [...plan.vendorDirectory, newVendor],
+      }));
     });
   },
 
