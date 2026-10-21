@@ -124,9 +124,9 @@ function ApiKeyDialogContent({
         <div className="bg-[#f5f5f7] rounded-xl p-3.5 border border-[#e5e5ea] flex items-start gap-3">
           <ShieldCheck className="w-4 h-4 text-[#137333] shrink-0 mt-0.5" />
           <div className="text-xs text-[#333333] space-y-1 leading-relaxed">
-            <p className="font-semibold text-[#1d1d1f]">Privacy & Security Guarantee</p>
+            <p className="font-semibold text-[#1d1d1f]">Transparent Privacy & Security</p>
             <p>
-              Your key is saved exclusively in your browser&apos;s local storage and transmitted solely to our Next.js API route via secure HTTPS headers for model inference.
+              Your key is saved exclusively in your browser&apos;s local storage and transmitted via secure HTTPS headers to our API route, which forwards it to Google&apos;s Gemini API for plan generation. We never persist, database, or log your key.
             </p>
           </div>
         </div>

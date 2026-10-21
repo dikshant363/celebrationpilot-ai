@@ -37,7 +37,7 @@ EVENT BRIEF WIZARD (Strict Schema Validation, Boundaries & Sanitization)
   ↓
 RATE LIMITER & SECURITY GATEWAY (Sliding-Window IP Throttling, Max 32KB Payload)
   ↓
-GEMINI AI GATEWAY (gemini-2.5-flash → gemini-2.0-flash → gemini-1.5-flash → gemini-2.5-pro)
+GEMINI AI GATEWAY (gemini-2.5-flash → gemini-2.0-flash → gemini-1.5-flash → gemini-2.5-pro → gemini-1.5-pro)
   ↓ [Automatic Schema Repair & Graceful Fallback on Network / Rate Limits]
 DOMAIN CELEBRATION DECISION ENGINE (Wedding, Corporate, Birthday, Gala)
   ↓
@@ -56,7 +56,7 @@ PRINTABLE EVENT DOSSIER & PDF EXPORT (XSS-Safe HTML Generation)
 
 - **Framework**: [Next.js 16.3.4 (App Router & Turbopack)](https://nextjs.org/)
 - **UI & State**: React 19, Tailwind CSS v4, Lucide React, `useSyncExternalStore`
-- **GenAI Engine**: `@google/genai` (Google Gemini 2.5 Flash, 2.0 Flash, 1.5 Flash, 2.5 Pro)
+- **GenAI Engine**: `@google/genai` (Google Gemini official production models: Gemini 2.5 Flash, 2.0 Flash, 1.5 Flash, 2.5 Pro, 1.5 Pro)
 - **Security**: In-memory sliding-window rate limiting, HTTP security headers (CSP, HSTS, X-Frame-Options), strict key format validation, and output entity escaping
 - **Accessibility**: WCAG 2.2 AA compliant contrast, ARIA tablist/tab controls, error alerts, and progressbar semantics
 - **Unit & Component Testing**: Vitest 5.0, JSDOM, Testing Library
@@ -109,7 +109,7 @@ npm run type-check
 # Run ESLint validation (0 errors, 0 warnings)
 npm run lint
 
-# Run Vitest unit & component test suite (14 test files, 51 passed)
+# Run Vitest unit & component test suite (15 test files, 54 passed)
 npm run test
 
 # Run Playwright end-to-end tests (7 browser specs passed)
@@ -141,21 +141,23 @@ npm run build
 | Integration: Full Workflow | `fullWorkflow.test.ts` | 1 / 1 | **PASS** |
 | Component: Concept Cards | `conceptCard.test.tsx` | 3 / 3 | **PASS** |
 | Component: Workspace Tabs | `workspaceTabs.test.tsx` | 4 / 4 | **PASS** |
+| Component: Planner Steps | `plannerSteps.test.tsx` | 3 / 3 | **PASS** |
 | API Route: `/api/generate-plan` | `generatePlanRoute.test.ts` | 7 / 7 | **PASS** |
 | Playwright E2E: Empty States | `emptyStates.spec.ts` | 3 / 3 | **PASS** |
 | Playwright E2E: Wizard Validation | `wizardValidation.spec.ts` | 1 / 1 | **PASS** |
 | Playwright E2E: Complete Journey | `celebrationJourney.spec.ts` | 1 / 1 | **PASS** |
 | Playwright E2E: State Mutations | `taskAndBudgetInteractions.spec.ts` | 1 / 1 | **PASS** |
 | Playwright E2E: Interactive Workspace | `interactiveWorkspaceWorkflow.spec.ts` | 1 / 1 | **PASS** |
-| **Total Automated Tests** | **19 Test Suites** | **58 / 58 Passed** | **100% PASS** |
+| **Total Automated Tests** | **20 Test Suites** | **61 / 61 Passed** | **100% PASS** |
 
 ---
 
-## 🔒 Privacy & Local-First Invariants
+## 🔒 Transparent Privacy & Local-First Invariants
 
-- **Local-First Storage**: Event briefs, concepts, tasks, guest lists, and vendor contracts persist in client-side storage (`localStorage`) via `useSyncExternalStore`.
-- **Credential Protection**: Custom user API keys never persist on any database or external logging platform; they reside solely in browser `localStorage` and transmit exclusively to the Next.js API route via secure HTTPS headers.
-- **Zero-Downtime Guarantee**: Network outages, invalid credentials, or quota limits gracefully fall back to domain-crafted deterministic celebration plans without crashing the user interface.
+- **External Data Transmission (Google Gemini)**: When a user requests plan generation on the celebration wizard, the high-level event brief parameters (event type, destination city, guest count, budget envelope, and theme) are transmitted over secure HTTPS to the Google Gemini API (`https://generativelanguage.googleapis.com`) using either the user's custom API key or the server key to generate tailored celebration concepts.
+- **Strictly Local Browser Storage**: Personal attendee lists, guest names, RSVP statuses, dietary accommodations, vendor contact emails, negotiated supplier rates, custom created tasks, and exported dossiers persist 100% on the client side in browser `localStorage` via `useSyncExternalStore`. They are never transmitted to external databases, tracking services, or remote logs.
+- **Credential Protection**: Custom user API keys never persist on any database or server-side storage; they reside solely in browser `localStorage` and transmit exclusively to the Next.js API route via secure HTTPS headers for model authentication.
+- **Zero-Downtime Deterministic Fallback**: Network outages, invalid credentials, or Google API quota limits gracefully fall back to domain-crafted deterministic celebration plans without crashing the user interface or leaking error traces.
 - **Strict Content Sanitization**: User inputs are stripped of control characters, bounded by schema validators, and entity-escaped when generating printable HTML dossiers.
 
 ---

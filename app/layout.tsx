@@ -9,7 +9,7 @@ import { ApiKeyModal } from '@/components/ui/ApiKeyModal';
 export const metadata: Metadata = {
   title: 'CelebrationPilot AI — Architectural Event & Celebration Studio',
   description:
-    'Turn celebration briefs into three feasible, tailored event concepts with schedules, budgets, tasks, and guest lists powered by Gemini AI.',
+    'Turn celebration briefs into three feasible, tailored event concepts with schedules, budgets, tasks, and guest lists with Google Gemini-powered event planning.',
 };
 
 export default function RootLayout({

@@ -61,7 +61,7 @@ export default function HomePage() {
       <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-20 pb-16 text-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f5f5f7] border border-[#d2d2d7] text-xs font-semibold text-[#1d1d1f] mb-6 shadow-2xs">
           <Sparkles className="w-3.5 h-3.5 text-[#0071e3]" />
-          <span>Hack2Skill Challenge 5 • Gemini 3.8 Flash Event Studio</span>
+          <span>Hack2Skill Challenge 5 • Google Gemini-Powered Event Planning</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-[#1d1d1f] mb-6 leading-[1.08]">
@@ -204,19 +204,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Safety & BYO API Key Guarantee */}
+      {/* Safety, Transparent Privacy & BYO API Key Guarantee */}
       <section className="w-full max-w-4xl mx-auto px-4 py-16 text-center">
-        <div className="bg-white border border-[#d2d2d7] rounded-3xl p-8 sm:p-12 shadow-sm space-y-4">
+        <div className="bg-white border border-[#d2d2d7] rounded-3xl p-8 sm:p-12 shadow-sm space-y-6">
           <div className="w-12 h-12 rounded-2xl bg-[#e8f2fe] flex items-center justify-center text-[#0071e3] mx-auto">
             <ShieldCheck className="w-6 h-6" />
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">
-            Client-Side Privacy & BYO Gemini API Key
-          </h3>
-          <p className="text-xs sm:text-sm text-[#333333] max-w-xl mx-auto leading-relaxed">
-            Your event details and guests are never shared with third parties or stored on external servers.
-            You can bring your own Google AI Studio API key directly from the top navigation bar.
+          <div>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">
+              Transparent Privacy & Data Handling
+            </h3>
+            <p className="text-xs sm:text-sm text-[#555555] mt-1">
+              Honest, local-first architecture with clear AI boundaries
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left text-xs sm:text-sm">
+            <div className="p-4 rounded-2xl bg-[#f5f5f7] border border-[#e5e5ea] space-y-2">
+              <span className="font-semibold text-[#1d1d1f] flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#34c759]" />
+                Kept Strictly in Your Browser
+              </span>
+              <p className="text-[#555555] leading-relaxed">
+                Guest names, RSVP statuses, dietary accommodations, vendor contacts, negotiated quotes, custom tasks, and exported dossiers remain 100% in local browser storage (<code className="text-[#1d1d1f] font-mono">localStorage</code>). No user tracking or analytics databases are used.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-[#f5f5f7] border border-[#e5e5ea] space-y-2">
+              <span className="font-semibold text-[#1d1d1f] flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#0071e3]" />
+                Transmitted During AI Generation
+              </span>
+              <p className="text-[#555555] leading-relaxed">
+                When you generate concepts, high-level brief constraints (celebration type, city, headcount, budget envelope, and theme) are transmitted over secure HTTPS to Google&apos;s Gemini API to produce your custom plan suite.
+              </p>
+            </div>
+          </div>
+
+          <p className="text-xs text-[#555555] max-w-xl mx-auto leading-relaxed">
+            You can supply your personal Google AI Studio API key via the key icon in the navigation bar. Your key is stored exclusively in your browser and used solely for your requests.
           </p>
+
           <div className="pt-2">
             <Link href="/planner">
               <Button variant="primary">Launch Event Wizard</Button>
